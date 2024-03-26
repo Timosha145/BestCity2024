@@ -1,11 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using UnityEngine; // Всегда уберай не нужные юзинги
 
+[CreateAssetMenu(menuName = "Building System/Residence")]
 public class ResidenceSO : ScriptableObject
 {
-    public int Population { get; private set; } // Количество жителей
-    public ResidenceType Type { get; private set; } // Тип дома
+    public int population { get; private set; }
+    public ResidenceType type { get; private set; }
+
     public enum ResidenceType
     {
         Private,
@@ -15,4 +15,5 @@ public class ResidenceSO : ScriptableObject
         Townhouse,
         Mansion,
     }
+
 }

@@ -8,9 +8,13 @@ public class PlacementSystem : MonoBehaviour
     [SerializeField] private GameObject buildingPrefab; // вместо GameObject лучше transform, так как нас интересует именно свойства позиции, не более (gameobject всегда можно получить из transform)
     [SerializeField] private InputManager inputManager;
     [SerializeField] private Grid grid;
+    [SerializeField] private Vector3 _offset;
+    [Space]
+    [SerializeField] private List<Road> _roads;
 
     private bool isBuilding = false;
     private GameObject currentBuilding;
+    private int _currentRoadSelection = 0;
 
     void Update()
     {
@@ -31,6 +35,20 @@ public class PlacementSystem : MonoBehaviour
             }
         }
 
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            _currentRoadSelection = (_currentRoadSelection + 1) % (_roads.Count + 1);
+            buildingPrefab = _roads[_currentRoadSelection].gameObject;
+
+            Destroy(currentBuilding);
+            StartBuilding();
+        }
+
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            currentBuilding.transform.Rotate(0f, 90f, 0f);
+        }
+
         if (isBuilding && currentBuilding != null)
         {
             UpdateBuildingPosition();
@@ -42,7 +60,7 @@ public class PlacementSystem : MonoBehaviour
         isBuilding = true;
         Vector3 mousePosition = inputManager.GetSelectedMapPosition();
         Vector3Int gridPosition = grid.WorldToCell(mousePosition);
-        currentBuilding = Instantiate(buildingPrefab, grid.CellToWorld(gridPosition), Quaternion.identity);
+        currentBuilding = Instantiate(buildingPrefab, grid.CellToWorld(gridPosition) + _offset, Quaternion.identity);
     }
 
     void FinishBuilding()
@@ -55,6 +73,6 @@ public class PlacementSystem : MonoBehaviour
         // Обновление позиции здания в соответствии с положением указателя мыши
         Vector3 mousePosition = inputManager.GetSelectedMapPosition();
         Vector3Int gridPosition = grid.WorldToCell(mousePosition);
-        currentBuilding.transform.position = grid.CellToWorld(gridPosition);
+        currentBuilding.transform.position = grid.CellToWorld(gridPosition) + _offset;
     }
 }

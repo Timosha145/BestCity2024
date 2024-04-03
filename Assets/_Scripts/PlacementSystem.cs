@@ -11,6 +11,7 @@ public class PlacementSystem : MonoBehaviour
     [SerializeField] private Vector3 _offset;
     [Space]
     [SerializeField] private List<Road> _roads;
+    [SerializeField] private Transform _defaultRoad;
 
     private bool isBuilding = false;
     private GameObject currentBuilding;
@@ -35,14 +36,11 @@ public class PlacementSystem : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            _currentRoadSelection = (_currentRoadSelection + 1) % (_roads.Count + 1);
-            buildingPrefab = _roads[_currentRoadSelection].gameObject;
-
-            Destroy(currentBuilding);
-            StartBuilding();
-        }
+        //if (Input.GetKeyDown(KeyCode.Space))
+        //{
+        //    Destroy(currentBuilding);
+        //    StartBuilding();
+        //}
 
         if (Input.GetKeyDown(KeyCode.R))
         {
@@ -74,5 +72,10 @@ public class PlacementSystem : MonoBehaviour
         Vector3 mousePosition = inputManager.GetSelectedMapPosition();
         Vector3Int gridPosition = grid.WorldToCell(mousePosition);
         currentBuilding.transform.position = grid.CellToWorld(gridPosition) + _offset;
+
+        if (currentBuilding.TryGetComponent(out Road road))
+        {
+            currentBuilding = road.GetSuitableRoad(_roads).gameObject;
+        }
     }
 }

@@ -98,9 +98,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 694f323c8c6d2a14087bbf379abdcc30, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _nodes:
-  - {fileID: 1959075037692821219}
-  - {fileID: 6228281322678928405}
+  <nodes>k__BackingField:
+  - {fileID: 6190457412474966398}
+  - {fileID: 4277972347796683734}
 --- !u!1 &4603273494153815574
 GameObject:
   m_ObjectHideFlags: 0
@@ -110,6 +110,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1959075037692821219}
+  - component: {fileID: 6190457412474966398}
+  - component: {fileID: 440308079086103416}
   m_Layer: 0
   m_Name: node_1
   m_TagString: Untagged
@@ -132,6 +134,41 @@ Transform:
   m_Father: {fileID: 400000}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6190457412474966398
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4603273494153815574}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc95ac033663c55469a1952f10ef326e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <road>k__BackingField: {fileID: -7833096561946685773}
+  _checkRadius: 0.2
+--- !u!135 &440308079086103416
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4603273494153815574}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 2
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &5847969425051277264
 GameObject:
   m_ObjectHideFlags: 0
@@ -141,6 +178,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6228281322678928405}
+  - component: {fileID: 4277972347796683734}
+  - component: {fileID: 585445497239333910}
   m_Layer: 0
   m_Name: node_2
   m_TagString: Untagged
@@ -163,3 +202,38 @@ Transform:
   m_Father: {fileID: 400000}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4277972347796683734
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5847969425051277264}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc95ac033663c55469a1952f10ef326e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <road>k__BackingField: {fileID: -7833096561946685773}
+  _checkRadius: 0.2
+--- !u!135 &585445497239333910
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5847969425051277264}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 2
+  m_Center: {x: 0, y: 0, z: 0}

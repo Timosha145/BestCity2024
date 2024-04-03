@@ -9,6 +9,7 @@ public class BuildingSO : ScriptableObject
     public float buildSpeed { get; private set; }
     public int waterRequirement { get; private set; }
     public int electricityRequirement { get; private set; }
+    public int Level { get; set; }
 
     // Поля, так как работаем напрямую с ними
     private int Foo1;

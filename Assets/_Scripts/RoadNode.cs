@@ -7,8 +7,6 @@ public class RoadNode : MonoBehaviour
     [field: SerializeField] public Road road { get; private set; }
     [SerializeField] public float _checkRadius = 0.2f;
 
-    public RoadNode collidingNode { get; private set; }
-
     public bool TryGetCollidingNode(out RoadNode collidingNode)
     {
         Collider[] colliders = Physics.OverlapSphere(transform.position, _checkRadius);
@@ -24,6 +22,22 @@ public class RoadNode : MonoBehaviour
 
         return false;
     }
+
+    public bool IsCollidingOtherRoad()
+    {
+        Collider[] colliders = Physics.OverlapSphere(transform.position, _checkRadius);
+
+        foreach (Collider collider in colliders)
+        {
+            if (collider.TryGetComponent(out Road road) && road != this.road)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
 
     private void OnDrawGizmos()
     {

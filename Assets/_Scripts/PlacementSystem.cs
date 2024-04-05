@@ -9,73 +9,95 @@ public class PlacementSystem : MonoBehaviour
     [SerializeField] private InputManager inputManager;
     [SerializeField] private Grid grid;
     [SerializeField] private Vector3 _offset;
-    [Space]
-    [SerializeField] private List<Road> _roads;
+    [field: SerializeField] public List<Road> roadVariants { get; private set; }
     [SerializeField] private Transform _defaultRoad;
 
     private bool isBuilding = false;
     private GameObject currentBuilding;
-    private int _currentRoadSelection = 0;
+    private Road _road;
+    private Vector3 _selectedGridPosition = Vector3.zero;
+
+    public static PlacementSystem Instance { get; private set; }
+
+    private void Awake()
+    {
+        if (!Instance)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(this);
+        }
+    }
 
     void Update()
     {
         // Старайся делать Update как можно абстракнее (вынеси в отдельный метод код снизу)
         Vector3 mousePosition = inputManager.GetSelectedMapPosition();
-        Vector3Int gridPosition = grid.WorldToCell(mousePosition);
-        cellIndicator.transform.position = grid.CellToWorld(gridPosition);
+        _selectedGridPosition = grid.CellToWorld(grid.WorldToCell(mousePosition)) + _offset;
+        cellIndicator.transform.position = _selectedGridPosition;
 
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetKeyDown(KeyCode.Mouse0))
         {
-            if (!isBuilding)
-            {
-                StartBuilding();
-            }
-            else
-            {
-                FinishBuilding();
-            }
+            isBuilding = !isBuilding;
+            currentBuilding = isBuilding
+                ? Instantiate(buildingPrefab, _selectedGridPosition, Quaternion.identity)
+                : null;
+
+            currentBuilding?.TryGetComponent(out _road);
         }
 
-        //if (Input.GetKeyDown(KeyCode.Space))
-        //{
-        //    Destroy(currentBuilding);
-        //    StartBuilding();
-        //}
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Destroy(currentBuilding);
+            isBuilding = false;
+            currentBuilding = null;
+        }
 
         if (Input.GetKeyDown(KeyCode.R))
         {
-            currentBuilding.transform.Rotate(0f, 90f, 0f);
+            RotateBuilding();
         }
 
         if (isBuilding && currentBuilding != null)
         {
-            UpdateBuildingPosition();
+            currentBuilding.transform.position = _selectedGridPosition;
+
+            if (_road)
+            {
+                Road suitableRoad = _road.GetSuitableRoad(_selectedGridPosition);
+
+                if (_road.roadName == suitableRoad.roadName)
+                {
+                    return;
+                }
+
+                List<Road> roadsToRotate = _road.GetCollidingRoads(_road.transform.position);
+                roadsToRotate.Add(_road);
+
+                ChangeBuilding(suitableRoad.gameObject);
+                
+                foreach (Road road in roadsToRotate)
+                {
+                    while (!road.AreNodesConnected())
+                    {
+                        road.transform.Rotate(0f, 90f, 0f);
+                    }
+                }
+            }
         }
     }
 
-    void StartBuilding()
+    private void RotateBuilding()
     {
-        isBuilding = true;
-        Vector3 mousePosition = inputManager.GetSelectedMapPosition();
-        Vector3Int gridPosition = grid.WorldToCell(mousePosition);
-        currentBuilding = Instantiate(buildingPrefab, grid.CellToWorld(gridPosition) + _offset, Quaternion.identity);
+        currentBuilding.transform.Rotate(0f, 90f, 0f);
     }
 
-    void FinishBuilding()
+    private void ChangeBuilding(GameObject newBuilding)
     {
-        isBuilding = false;
-    }
-
-    void UpdateBuildingPosition()
-    {
-        // Обновление позиции здания в соответствии с положением указателя мыши
-        Vector3 mousePosition = inputManager.GetSelectedMapPosition();
-        Vector3Int gridPosition = grid.WorldToCell(mousePosition);
-        currentBuilding.transform.position = grid.CellToWorld(gridPosition) + _offset;
-
-        if (currentBuilding.TryGetComponent(out Road road))
-        {
-            currentBuilding = road.GetSuitableRoad(_roads).gameObject;
-        }
+        Destroy(currentBuilding);
+        currentBuilding = Instantiate(newBuilding, _selectedGridPosition, Quaternion.identity);
+        currentBuilding?.TryGetComponent(out _road);
     }
 }

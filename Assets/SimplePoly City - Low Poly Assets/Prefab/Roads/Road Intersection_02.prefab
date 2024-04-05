@@ -12,6 +12,8 @@ GameObject:
   - component: {fileID: 3300000}
   - component: {fileID: 2300000}
   - component: {fileID: -2129837569763762710}
+  - component: {fileID: -2391667654100261092}
+  - component: {fileID: 2608653686402869706}
   m_Layer: 0
   m_Name: Road Intersection_02
   m_TagString: Untagged
@@ -100,11 +102,55 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 694f323c8c6d2a14087bbf379abdcc30, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _checkNodesRadius: 1.5
   <nodes>k__BackingField:
   - {fileID: 7562675705076813944}
   - {fileID: 7878752745737305518}
   - {fileID: 3663986635760097565}
   - {fileID: 7264716069547869887}
+  <roadName>k__BackingField: Road Intersection_02
+--- !u!65 &-2391667654100261092
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100000}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 5, y: 0.20000085, z: 20}
+  m_Center: {x: 0, y: 0.099999994, z: 3.5527137e-16}
+--- !u!65 &2608653686402869706
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100000}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 20, y: 0.20000085, z: 5}
+  m_Center: {x: 0, y: 0.099999994, z: 3.5527137e-16}
 --- !u!1 &3157984724007724540
 GameObject:
   m_ObjectHideFlags: 0

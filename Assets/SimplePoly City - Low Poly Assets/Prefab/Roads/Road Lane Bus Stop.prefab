@@ -98,9 +98,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 694f323c8c6d2a14087bbf379abdcc30, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _checkNodesRadius: 2.46
   <nodes>k__BackingField:
   - {fileID: 1346088893897837592}
   - {fileID: 1593397859429144943}
+  <roadPrefab>k__BackingField: {fileID: 4273736511879374282}
 --- !u!1 &5513285091749960770
 GameObject:
   m_ObjectHideFlags: 0

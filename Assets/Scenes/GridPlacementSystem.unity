@@ -168,7 +168,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cellIndicator: {fileID: 2061847798}
-  buildingPrefab: {fileID: 100000, guid: e5a98a4c41704e24eb7e4dafcc7c42b4, type: 3}
+  buildingPrefab: {fileID: 100000, guid: a1eb827aa0413ab4a8b3b08c0e1a8c56, type: 3}
   inputManager: {fileID: 685019696}
   grid: {fileID: 551200190}
   _offset: {x: 0, y: 0.01, z: 0}
@@ -183,8 +183,6 @@ MonoBehaviour:
   - {fileID: 2132590312594381789, guid: 7bee8d1373230ef4882d6dc0a63b35df, type: 3}
   - {fileID: -6317316429840920000, guid: cbc86bb57f673ba45a8426789eb0fac0, type: 3}
   - {fileID: -6657088767741410241, guid: 11b412f2ff905c341be6af606611e4a3, type: 3}
-  _defaultRoad: {fileID: 8359048235326441892, guid: 7bee8d1373230ef4882d6dc0a63b35df,
-    type: 3}
 --- !u!1 &282171880
 GameObject:
   m_ObjectHideFlags: 0

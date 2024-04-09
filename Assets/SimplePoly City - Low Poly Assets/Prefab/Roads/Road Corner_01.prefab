@@ -12,8 +12,7 @@ GameObject:
   - component: {fileID: 3300000}
   - component: {fileID: 2300000}
   - component: {fileID: -5433367011328572262}
-  - component: {fileID: 943602758282197897}
-  - component: {fileID: 7855710856878992301}
+  - component: {fileID: 4694179351233261121}
   m_Layer: 0
   m_Name: Road Corner_01
   m_TagString: Untagged
@@ -104,9 +103,8 @@ MonoBehaviour:
   <nodes>k__BackingField:
   - {fileID: 8278811561863666277}
   - {fileID: 2240187807272921021}
-  <roadName>k__BackingField: Road Corner_01
---- !u!65 &943602758282197897
-BoxCollider:
+--- !u!136 &4694179351233261121
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -120,32 +118,13 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 5, y: 0.20000084, z: 19.999998}
-  m_Center: {x: 0, y: 0.09999999, z: 3.5527135e-16}
---- !u!65 &7855710856878992301
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 100000}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 19.999998, y: 0.20000084, z: 5}
+  serializedVersion: 2
+  m_Radius: 9.999999
+  m_Height: 0.20000084
+  m_Direction: 1
   m_Center: {x: 0, y: 0.09999999, z: 3.5527135e-16}
 --- !u!1 &5418768730043753486
 GameObject:

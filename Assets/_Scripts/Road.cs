@@ -1,15 +1,14 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class Road : MonoBehaviour
 {
     [SerializeField, Range(0f, 5f)] private float _checkNodesRadius = 1.5f;
     [field: SerializeField] public List<RoadNode> nodes { get; private set; } = new List<RoadNode>();
-    [field: SerializeField] public string roadName { get; private set; }
-
+    [SerializeField] public List<Road> collidingRoads { get; private set; } = new List<Road>();
     public List<Road> GetCollidingRoads(Vector3 position)
     {
         Collider[] colliders = Physics.OverlapSphere(position, _checkNodesRadius);
@@ -26,9 +25,9 @@ public class Road : MonoBehaviour
         return collidingRodes;
     }
 
-    public Road GetSuitableRoad(Vector3 position)
+    public Road GetSuitableRoad()
     {
-        List<Road> collidingRodes = GetCollidingRoads(position);
+        List<Road> collidingRodes = GetCollidingRoads(transform.position);
 
         foreach (Road road in PlacementSystem.Instance.roadVariants)
         {

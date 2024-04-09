@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class PlacementSystem : MonoBehaviour
 {
@@ -10,7 +11,6 @@ public class PlacementSystem : MonoBehaviour
     [SerializeField] private Grid grid;
     [SerializeField] private Vector3 _offset;
     [field: SerializeField] public List<Road> roadVariants { get; private set; }
-    [SerializeField] private Transform _defaultRoad;
 
     private bool isBuilding = false;
     private GameObject currentBuilding;
@@ -40,12 +40,7 @@ public class PlacementSystem : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
-            isBuilding = !isBuilding;
-            currentBuilding = isBuilding
-                ? Instantiate(buildingPrefab, _selectedGridPosition, Quaternion.identity)
-                : null;
-
-            currentBuilding?.TryGetComponent(out _road);
+            Build();
         }
 
         if (Input.GetKeyDown(KeyCode.Escape))
@@ -55,49 +50,58 @@ public class PlacementSystem : MonoBehaviour
             currentBuilding = null;
         }
 
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            RotateBuilding();
-        }
+        //if (Input.GetKeyDown(KeyCode.R))
+        //{
+        //    RotateBuilding(currentBuilding);
+        //}
 
         if (isBuilding && currentBuilding != null)
         {
             currentBuilding.transform.position = _selectedGridPosition;
+        }
+    }
 
-            if (_road)
+    private void Build()
+    {
+        isBuilding = !isBuilding;
+
+        if (isBuilding)
+        {
+            currentBuilding = Instantiate(buildingPrefab, _selectedGridPosition, Quaternion.identity);
+            currentBuilding?.TryGetComponent(out _road);
+        }
+        else
+        {
+            List<Road> roadsToRotate = new List<Road> { _road };
+            roadsToRotate.AddRange(_road.GetCollidingRoads(_road.transform.position));
+
+            foreach (Road road in roadsToRotate)
             {
-                Road suitableRoad = _road.GetSuitableRoad(_selectedGridPosition);
+                Road suitableRoad = road.GetSuitableRoad();
+                GameObject newBuilding = ChangeBuilding(road.gameObject, suitableRoad.gameObject);
+                Road newRoad = newBuilding.GetComponent<Road>();
 
-                if (_road.roadName == suitableRoad.roadName)
+                for (int i = 0; i < 10; i++)
                 {
-                    return;
-                }
+                    RotateBuilding(newBuilding);
 
-                List<Road> roadsToRotate = _road.GetCollidingRoads(_road.transform.position);
-                roadsToRotate.Add(_road);
-
-                ChangeBuilding(suitableRoad.gameObject);
-                
-                foreach (Road road in roadsToRotate)
-                {
-                    while (!road.AreNodesConnected())
+                    if (newRoad.AreNodesConnected())
                     {
-                        road.transform.Rotate(0f, 90f, 0f);
+                        break;
                     }
                 }
             }
         }
     }
 
-    private void RotateBuilding()
+    private void RotateBuilding(GameObject building)
     {
-        currentBuilding.transform.Rotate(0f, 90f, 0f);
+        building.transform.Rotate(0f, 90f, 0f);
     }
 
-    private void ChangeBuilding(GameObject newBuilding)
+    private GameObject ChangeBuilding(GameObject oldBuilding, GameObject newBuilding)
     {
-        Destroy(currentBuilding);
-        currentBuilding = Instantiate(newBuilding, _selectedGridPosition, Quaternion.identity);
-        currentBuilding?.TryGetComponent(out _road);
+        Destroy(oldBuilding);
+        return Instantiate(newBuilding, oldBuilding.transform.position, Quaternion.identity);
     }
 }

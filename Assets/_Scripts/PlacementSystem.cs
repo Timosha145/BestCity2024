@@ -1,48 +1,56 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlacementSystem : MonoBehaviour
 {
-    [SerializeField] private GameObject cellIndicator; // в c# private поля лучше пиши начиная с нижнего подчеркивания _foo
-    [SerializeField] private GameObject buildingPrefab; // вместо GameObject лучше transform, так как нас интересует именно свойства позиции, не более (gameobject всегда можно получить из transform)
+    [SerializeField] private GameObject cellIndicator;
+    [SerializeField] private GameObject buildingPrefab;
     [SerializeField] private InputManager inputManager;
     [SerializeField] private Grid grid;
+    public Button houseButton;
 
     private bool isBuilding = false;
     private GameObject currentBuilding;
 
-    void Update()
+    void Start()
     {
-        // Старайся делать Update как можно абстракнее (вынеси в отдельный метод код снизу)
+        houseButton.onClick.AddListener(StartHouseBuilding);
+    }
+
+    void Update()
+    {   
         Vector3 mousePosition = inputManager.GetSelectedMapPosition();
         Vector3Int gridPosition = grid.WorldToCell(mousePosition);
         cellIndicator.transform.position = grid.CellToWorld(gridPosition);
 
-        if (Input.GetMouseButtonDown(0))
-        {
-            if (!isBuilding)
-            {
-                StartBuilding();
-            }
-            else
-            {
-                FinishBuilding();
-            }
-        }
-
         if (isBuilding && currentBuilding != null)
         {
             UpdateBuildingPosition();
+
+            if (Input.GetMouseButtonDown(0))
+            {
+                PlaceBuilding();
+            }
+
+            // Проверяем нажатие кнопки R для вращения здания
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                RotateBuilding();
+            }
         }
     }
 
-    void StartBuilding()
+    void StartHouseBuilding()
     {
-        isBuilding = true;
-        Vector3 mousePosition = inputManager.GetSelectedMapPosition();
-        Vector3Int gridPosition = grid.WorldToCell(mousePosition);
-        currentBuilding = Instantiate(buildingPrefab, grid.CellToWorld(gridPosition), Quaternion.identity);
+        if (!isBuilding)
+        {
+            isBuilding = true;
+            Vector3 mousePosition = inputManager.GetSelectedMapPosition();
+            Vector3Int gridPosition = grid.WorldToCell(mousePosition);
+
+            Vector3 worldPosition = grid.CellToWorld(gridPosition) + new Vector3(grid.cellSize.x / 2, grid.cellSize.y / 2, 0f);
+            currentBuilding = Instantiate(buildingPrefab, worldPosition, Quaternion.identity);
+        }
     }
 
     void FinishBuilding()
@@ -52,9 +60,21 @@ public class PlacementSystem : MonoBehaviour
 
     void UpdateBuildingPosition()
     {
-        // Обновление позиции здания в соответствии с положением указателя мыши
         Vector3 mousePosition = inputManager.GetSelectedMapPosition();
         Vector3Int gridPosition = grid.WorldToCell(mousePosition);
         currentBuilding.transform.position = grid.CellToWorld(gridPosition);
+    }
+
+    void PlaceBuilding()
+    {   
+        Vector3 mousePosition = inputManager.GetSelectedMapPosition();
+        Vector3Int gridPosition = grid.WorldToCell(mousePosition);
+        FinishBuilding();
+    }
+
+    // Метод для вращения здания
+    void RotateBuilding()
+    {
+        currentBuilding.transform.Rotate(Vector3.up, 90f); // Поворачиваем на 90 градусов вокруг оси Y
     }
 }

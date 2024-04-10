@@ -4,18 +4,6 @@ using UnityEngine;
 public class BuildingSO : ScriptableObject
 {
     [field: SerializeField] public int cost { get; private set; }
-    [field: SerializeField] public GameObject prefabBuilding { get; private set; }
     [field: SerializeField] public int waterRequirement { get; private set; }
     [field: SerializeField] public int electricityRequirement { get; private set; }
-
-    public virtual void Build()
-    {
-        if (cost > GameManager.Instance.money)
-        {
-            Debug.Log("No Money Loh");
-            return;
-        }
-
-
-    }
 }

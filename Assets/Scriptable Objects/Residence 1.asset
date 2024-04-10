@@ -13,9 +13,8 @@ MonoBehaviour:
   m_Name: Residence 1
   m_EditorClassIdentifier: 
   <cost>k__BackingField: 100
-  <prefabBuilding>k__BackingField: {fileID: 100000, guid: 22106dc63dce41746ad234a91af2d657,
-    type: 3}
   <waterRequirement>k__BackingField: 0
   <electricityRequirement>k__BackingField: 0
   <population>k__BackingField: 100
   <type>k__BackingField: 0
+  <timeToMoveIn>k__BackingField: 2

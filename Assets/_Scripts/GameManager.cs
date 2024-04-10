@@ -4,8 +4,8 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
 
-    [field: SerializeField] public int population { get; private set; }
-    [field: SerializeField] public float money { get; private set; }
+    [field: SerializeField] public int population { get; set; }
+    [field: SerializeField] public float money { get; set; }
 
 
     private void Awake()

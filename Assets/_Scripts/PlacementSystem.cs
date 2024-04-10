@@ -1,5 +1,7 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.UIElements;
 
 public class PlacementSystem : MonoBehaviour
 {
@@ -7,74 +9,82 @@ public class PlacementSystem : MonoBehaviour
     [SerializeField] private GameObject buildingPrefab;
     [SerializeField] private InputManager inputManager;
     [SerializeField] private Grid grid;
-    public Button houseButton;
+    [SerializeField] private Vector3 _offset;
 
     private bool isBuilding = false;
     private GameObject currentBuilding;
+    private Vector3 _selectedGridPosition = Vector3.zero;
 
-    void Start()
+    public static PlacementSystem Instance { get; private set; }
+
+    private void Awake()
     {
-        houseButton.onClick.AddListener(StartHouseBuilding);
+        if (!Instance)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(this);
+        }
     }
 
     void Update()
-    {   
+    {
         Vector3 mousePosition = inputManager.GetSelectedMapPosition();
-        Vector3Int gridPosition = grid.WorldToCell(mousePosition);
-        cellIndicator.transform.position = grid.CellToWorld(gridPosition);
+        _selectedGridPosition = grid.CellToWorld(grid.WorldToCell(mousePosition)) + _offset;
+        cellIndicator.transform.position = _selectedGridPosition;
+
+        if (Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            isBuilding = !isBuilding;
+
+            if (isBuilding)
+            {
+                currentBuilding = Instantiate(buildingPrefab, _selectedGridPosition, Quaternion.identity);
+
+                if (currentBuilding.TryGetComponent(out Building building))
+                {
+                    building.Select();
+                }
+            }
+            else
+            {
+                if (currentBuilding.TryGetComponent(out Building building) && building.CanBuild())
+                {
+                    building.isBuilt = true;
+                    building.Pay();
+                    building.Unselect();
+                }
+                else
+                {
+                    Destroy(currentBuilding);
+                }
+
+                currentBuilding = null;
+            }
+        }
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Destroy(currentBuilding);
+            isBuilding = false;
+            currentBuilding = null;
+        }
+
+        if (Input.GetKeyDown(KeyCode.R) && currentBuilding)
+        {
+            RotateBuilding(currentBuilding);
+        }
 
         if (isBuilding && currentBuilding != null)
         {
-            UpdateBuildingPosition();
-
-            if (Input.GetMouseButtonDown(0))
-            {
-                PlaceBuilding();
-            }
-
-            // Проверяем нажатие кнопки R для вращения здания
-            if (Input.GetKeyDown(KeyCode.R))
-            {
-                RotateBuilding();
-            }
+            currentBuilding.transform.position = _selectedGridPosition;
         }
     }
 
-    void StartHouseBuilding()
+    private void RotateBuilding(GameObject building)
     {
-        if (!isBuilding)
-        {
-            isBuilding = true;
-            Vector3 mousePosition = inputManager.GetSelectedMapPosition();
-            Vector3Int gridPosition = grid.WorldToCell(mousePosition);
-
-            Vector3 worldPosition = grid.CellToWorld(gridPosition) + new Vector3(grid.cellSize.x / 2, grid.cellSize.y / 2, 0f);
-            currentBuilding = Instantiate(buildingPrefab, worldPosition, Quaternion.identity);
-        }
-    }
-
-    void FinishBuilding()
-    {
-        isBuilding = false;
-    }
-
-    void UpdateBuildingPosition()
-    {
-        Vector3 mousePosition = inputManager.GetSelectedMapPosition();
-        Vector3Int gridPosition = grid.WorldToCell(mousePosition);
-        currentBuilding.transform.position = grid.CellToWorld(gridPosition);
-    }
-
-    void PlaceBuilding()
-    {   
-        Vector3 mousePosition = inputManager.GetSelectedMapPosition();
-        Vector3Int gridPosition = grid.WorldToCell(mousePosition);
-        FinishBuilding();
-    }
-
-    // Метод для вращения здания
-    void RotateBuilding()
-    {
-        currentBuilding.transform.Rotate(Vector3.up, 90f); // Поворачиваем на 90 градусов вокруг оси Y
+        building.transform.Rotate(0f, 90f, 0f);
     }
 }

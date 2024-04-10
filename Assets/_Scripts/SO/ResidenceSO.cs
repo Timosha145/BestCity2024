@@ -1,19 +1,8 @@
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Building System/Residence")]
-public class ResidenceSO : ScriptableObject
+public class ResidenceSO : BuildingSO
 {
-    public int population { get; private set; }
-    public ResidenceType type { get; private set; }
-
-    public enum ResidenceType
-    {
-        Private, // Частный дом
-        Apartment, // Квартирный дом
-        Dormitory, // Общежитие
-        Duplex, // Дуплекс
-        Townhouse, // Таунхаус
-        Mansion  // Особняк
-    }
-
+    [field: SerializeField] public int population { get; private set; }
+    [field: SerializeField] public ProductionType type { get; private set; }
 }

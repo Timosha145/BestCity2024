@@ -1,22 +1,18 @@
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Building System/Commercial")]
-public class CommercialSO : ScriptableObject
+public class CommercialSO : BuildingSO
 {
-    public string Name;
-    public int Cost;
-    public float TimeConstruction;
-    public GameObject PrefabBuilding;
+    [field: SerializeField] public int workerMaxEmount { get; private set; }
+    [field: SerializeField] public float productionRate { get; private set; }
+    [field: SerializeField] public int productionEmount { get; private set; }
+    [field: SerializeField] public RawMaterialType neededMaterial { get; private set; }
+    [field: SerializeField] public ProductionType type { get; private set; }
+}
 
-    public int revenue { get; private set; } // Доход от здания
-    public CommercialType type { get; private set; } // Тип коммерческого здания
-
-    public enum CommercialType
-    {
-        RetailStore, // Розничный магазин
-        Restaurant, // Ресторан
-        OfficeBuilding, // Офисное здание
-        GasStation, // Заправка
-        Mall  // Торговый центр
-    }
+public enum ProductionType
+{
+    Food,
+    Clothes,
+    Furniture,
 }

@@ -1,17 +1,17 @@
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Building System/Industrial")]
-public class IndustrialSO : ScriptableObject
+public class IndustrialSO : BuildingSO
 {
-    public int productionRate { get; private set; } // Скорость производства
-    public IndustrialType type { get; private set; } // Тип промышленного здания
+    [field: SerializeField] public int workerMaxEmount { get; private set; }
+    [field: SerializeField] public float productionRate { get; private set; }
+    [field: SerializeField] public int productionEmount { get; private set; }
+    [field: SerializeField] public RawMaterialType type { get; private set; }
+}
 
-    public enum IndustrialType
-    {
-        Factory, // Фабрика
-        Warehouse, // Склад
-        Refinery, // Нефтеперерабатывающий завод
-        Mill, // Мельница
-        Foundry // Литейный завод
-    }
+public enum RawMaterialType
+{
+    Wheat,
+    Wood,
+    Textile
 }

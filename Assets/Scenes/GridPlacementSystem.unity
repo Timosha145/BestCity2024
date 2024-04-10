@@ -168,10 +168,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cellIndicator: {fileID: 2061847798}
-  buildingPrefab: {fileID: 100000, guid: 65abb0f1b521f834bae80ea4c9d93734, type: 3}
+  buildingPrefab: {fileID: 100000, guid: 22106dc63dce41746ad234a91af2d657, type: 3}
   inputManager: {fileID: 685019696}
   grid: {fileID: 551200190}
-  houseButton: {fileID: 1699776310}
+  _offset: {x: 0, y: 0, z: 0}
 --- !u!1 &235826876
 GameObject:
   m_ObjectHideFlags: 0
@@ -202,7 +202,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <population>k__BackingField: 0
-  <money>k__BackingField: 0
+  <money>k__BackingField: 300
 --- !u!4 &235826878
 Transform:
   m_ObjectHideFlags: 0

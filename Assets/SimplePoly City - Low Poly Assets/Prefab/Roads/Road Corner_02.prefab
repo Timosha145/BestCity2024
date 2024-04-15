@@ -103,6 +103,9 @@ MonoBehaviour:
   <nodes>k__BackingField:
   - {fileID: 6190457412474966398}
   - {fileID: 4277972347796683734}
+  <type>k__BackingField: 0
+  <crossingVersion>k__BackingField: {fileID: -5433367011328572262, guid: 3a7e1c0a00828fd4196c8cd24886d2ed,
+    type: 3}
 --- !u!136 &-5348887711538596088
 CapsuleCollider:
   m_ObjectHideFlags: 0

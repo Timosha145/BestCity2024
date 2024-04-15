@@ -105,6 +105,9 @@ MonoBehaviour:
   - {fileID: 3000974850023272556}
   - {fileID: 7304728013301801023}
   - {fileID: 596660302507804118}
+  <type>k__BackingField: 2
+  <crossingVersion>k__BackingField: {fileID: -6317316429840920000, guid: cbc86bb57f673ba45a8426789eb0fac0,
+    type: 3}
 --- !u!136 &5622902995020576616
 CapsuleCollider:
   m_ObjectHideFlags: 0

@@ -1,14 +1,29 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
+using UnityEditor;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class Road : MonoBehaviour
 {
+    const float STRAIGHT_ROAD_MIN_LENGTH = 3f;
+    const float CHANCE_CROSSING_ROAD = 0.2f;
+
     [SerializeField, Range(0f, 5f)] private float _checkNodesRadius = 1.5f;
     [field: SerializeField] public List<RoadNode> nodes { get; private set; } = new List<RoadNode>();
-    [SerializeField] public List<Road> collidingRoads { get; private set; } = new List<Road>();
+    [field: SerializeField] public RoadType type { get; private set; } = RoadType.Other;
+    [field: SerializeField] public Road crossingVersion { get; private set; }
+
+    public List<Road> collidingRoads { get; private set; } = new List<Road>();
+
+    public enum RoadType
+    {
+        Corner,
+        Straight,
+        Other
+    }
+
     public List<Road> GetCollidingRoads(Vector3 position)
     {
         Collider[] colliders = Physics.OverlapSphere(position, _checkNodesRadius);
@@ -31,10 +46,24 @@ public class Road : MonoBehaviour
 
         foreach (Road road in PlacementSystem.Instance.roadVariants)
         {
-            if (road.nodes.Count == collidingRodes.Count)
+            if (collidingRodes.Count == 2)
             {
-                return road;
+                bool isStraight = Vector3.Distance(collidingRodes[0].transform.position, collidingRodes[1].transform.position) > STRAIGHT_ROAD_MIN_LENGTH;
+
+                if ((isStraight && road.type == RoadType.Straight) || (!isStraight && road.type == RoadType.Corner))
+                {
+                    float chance = Random.Range(0, 1f);
+                    Debug.Log($"C: [{chance}]");
+                    return chance <= CHANCE_CROSSING_ROAD ? road.crossingVersion ?? road : road;
+                }
             }
+            else if (road.nodes.Count == collidingRodes.Count)
+            {
+                float chance = Random.Range(0, 1f);
+                Debug.Log($"C: [{chance}]");
+                return Random.Range(0, 1f) <= CHANCE_CROSSING_ROAD ? road.crossingVersion ?? road : road;
+            }
+
         }
 
         return this;

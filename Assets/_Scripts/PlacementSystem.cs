@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -31,7 +33,7 @@ public class PlacementSystem : MonoBehaviour
         }
     }
 
-    void Update()
+    private async void Update()
     {
         // Старайся делать Update как можно абстракнее (вынеси в отдельный метод код снизу)
         Vector3 mousePosition = inputManager.GetSelectedMapPosition();
@@ -40,7 +42,7 @@ public class PlacementSystem : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
-            Build();
+            await Build();
         }
 
         if (Input.GetKeyDown(KeyCode.Escape))
@@ -61,7 +63,7 @@ public class PlacementSystem : MonoBehaviour
         }
     }
 
-    private void Build()
+    private async Task Build()
     {
         isBuilding = !isBuilding;
 
@@ -80,15 +82,16 @@ public class PlacementSystem : MonoBehaviour
                 Road suitableRoad = road.GetSuitableRoad();
                 GameObject newBuilding = ChangeBuilding(road.gameObject, suitableRoad.gameObject);
                 Road newRoad = newBuilding.GetComponent<Road>();
+                await Task.Delay(TimeSpan.FromSeconds(0.025f));
 
                 for (int i = 0; i < 10; i++)
                 {
-                    RotateBuilding(newBuilding);
-
                     if (newRoad.AreNodesConnected())
                     {
                         break;
                     }
+
+                    RotateBuilding(newBuilding);
                 }
             }
         }

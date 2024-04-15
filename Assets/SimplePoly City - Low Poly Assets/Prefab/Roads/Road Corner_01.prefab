@@ -103,6 +103,7 @@ MonoBehaviour:
   <nodes>k__BackingField:
   - {fileID: 8278811561863666277}
   - {fileID: 2240187807272921021}
+  <type>k__BackingField: 0
 --- !u!136 &4694179351233261121
 CapsuleCollider:
   m_ObjectHideFlags: 0

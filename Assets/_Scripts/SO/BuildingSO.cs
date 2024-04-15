@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Building System/Standard")] // Добавляет возможность создать SO в панеле быстро доступа при ПКМ по иерархии
+[CreateAssetMenu(menuName = "Building System/Standard")]
 public class BuildingSO : ScriptableObject
 {
     [field: SerializeField] public int cost { get; private set; }

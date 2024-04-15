@@ -99,6 +99,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   buildingSO: {fileID: 0}
   _selectVisual: {fileID: 8105797938498967144}
+  isBuilt: 0
   <residenceSO>k__BackingField: {fileID: 11400000, guid: ec37eb1221ff0e1479771c4f92d7da9e,
     type: 2}
 --- !u!1 &8105797938498967144
@@ -199,5 +200,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   buildingSO: {fileID: 0}
   _selectVisual: {fileID: 0}
+  isBuilt: 0
   <residenceSO>k__BackingField: {fileID: 11400000, guid: ec37eb1221ff0e1479771c4f92d7da9e,
     type: 2}

@@ -6,7 +6,7 @@ public class GameManager : MonoBehaviour
 
     [field: SerializeField] public int population { get; set; }
     [field: SerializeField] public float money { get; set; }
-
+    [field: SerializeField] public float material { get; set; }
 
     private void Awake()
     {
@@ -18,5 +18,15 @@ public class GameManager : MonoBehaviour
         {
             Instance = this;
         }
+    }
+
+    public void SubtractMoney(float amount)
+    {
+        money -= amount;
+    }
+
+    public void AddMaterials(float amount)
+    {
+        material += amount;
     }
 }

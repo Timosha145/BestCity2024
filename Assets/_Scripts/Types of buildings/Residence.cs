@@ -25,7 +25,7 @@ public class Residence : Building
         _timer += Time.deltaTime;
 
         if (_timer > residenceSO.timeToMoveIn && currentPopulation < residenceSO.population)
-        {
+        {   
             _timer = 0;
             AssignRandomPeopleMoveInCount();
             currentPopulation = Mathf.Clamp(currentPopulation + _peopleMoveInCount, 0, residenceSO.population);

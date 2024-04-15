@@ -10,16 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d5f2db28f2b4bfe4181a72590b871cfe, type: 3}
-  m_Name: Shop 1
+  m_Name: Commercial 1
   m_EditorClassIdentifier: 
-  <cost>k__BackingField: 100
-  <prefabBuilding>k__BackingField: {fileID: 100000, guid: 65abb0f1b521f834bae80ea4c9d93734,
-    type: 3}
-  <buildSpeed>k__BackingField: 10
+  <cost>k__BackingField: 200
   <waterRequirement>k__BackingField: 0
   <electricityRequirement>k__BackingField: 0
-  <workerMaxEmount>k__BackingField: 10
-  <productionRate>k__BackingField: 10
-  <productionEmount>k__BackingField: 20
-  <neededMaterial>k__BackingField: 0
-  <type>k__BackingField: 0
+  <production>k__BackingField: 100
+  <incomeInterval>k__BackingField: 2
+  <type>k__BackingField: 2

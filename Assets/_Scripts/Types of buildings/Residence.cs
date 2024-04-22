@@ -15,12 +15,14 @@ public class Residence : Building
         AssignRandomPeopleMoveInCount();
     }
 
-    private void Update()
+    protected override void Update()
     {
         if (!isBuilt)
         {
             return;
         }
+
+        base.Update();
 
         _timer += Time.deltaTime;
 

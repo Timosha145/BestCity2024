@@ -87,4 +87,11 @@ public class PlacementSystem : MonoBehaviour
     {
         building.transform.Rotate(0f, 90f, 0f);
     }
+
+    public void ChangeBuilding(GameObject building)
+    {
+        Destroy(currentBuilding);
+        buildingPrefab = building;
+        currentBuilding = Instantiate(buildingPrefab, _selectedGridPosition, Quaternion.identity);
+    }
 }

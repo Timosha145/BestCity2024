@@ -2,17 +2,33 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Industrial : MonoBehaviour
+public class Industrial : Building
 {
-    // Start is called before the first frame update
-    void Start()
+    [field: SerializeField] public IndustrialSO industrialSO { get; private set; }
+    private float _timer = 0;
+    private float _workerCount = 0;
+
+    private void Awake()
     {
-        
+        initBuildingSO(industrialSO);
     }
 
-    // Update is called once per frame
-    void Update()
+    protected override void Update()
     {
-        
+        if (!isBuilt)
+        {
+            return;
+        }
+
+        base.Update();
+
+        _timer += Time.deltaTime;
+
+        if (_timer > industrialSO.productionRate)
+        {
+            _timer = 0;
+            GameManager.Instance.materials += industrialSO.productionAmount;
+        }
     }
+
 }

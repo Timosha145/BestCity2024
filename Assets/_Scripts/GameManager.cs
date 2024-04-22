@@ -5,8 +5,10 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
 
     [field: SerializeField] public int population { get; set; }
+    [field: SerializeField] public int employed { get; private set; }
     [field: SerializeField] public float money { get; set; }
-    [field: SerializeField] public float material { get; set; }
+    [field: SerializeField] public float materials { get; set; }
+    [field: SerializeField] public float products { get; set; }
 
     private void Awake()
     {
@@ -20,13 +22,16 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void SubtractMoney(float amount)
+    public int Employ(int people)
     {
-        money -= amount;
+        int employedSuccess = Mathf.Clamp(people, 0, population - employed);
+        employed += employedSuccess;
+
+        return employedSuccess;
     }
 
-    public void AddMaterials(float amount)
+    public void Unemploy(int people)
     {
-        material += amount;
+        employed -= people;
     }
 }

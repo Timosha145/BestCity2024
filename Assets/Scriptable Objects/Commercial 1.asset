@@ -13,8 +13,10 @@ MonoBehaviour:
   m_Name: Commercial 1
   m_EditorClassIdentifier: 
   <cost>k__BackingField: 200
-  <waterRequirement>k__BackingField: 0
-  <electricityRequirement>k__BackingField: 0
-  <production>k__BackingField: 100
-  <incomeInterval>k__BackingField: 2
-  <type>k__BackingField: 2
+  <waitUntilDestroying>k__BackingField: 15
+  <workerNeededAmount>k__BackingField: 20
+  <workerAmountThreshold>k__BackingField: 0.1
+  <materialsNeededAmount>k__BackingField: 15
+  <materialsAmountThreshold>k__BackingField: 0.1
+  <productionRate>k__BackingField: 3
+  <productionAmount>k__BackingField: 7

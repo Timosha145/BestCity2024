@@ -3,42 +3,64 @@ using UnityEngine;
 public class Commercial : Building
 {
     [field: SerializeField] public CommercialSO commercialSO { get; private set; }
-    public int currentProduction { get; private set; }
     private float _timer = 0;
-    private int _maxIncomePerInterval;
-
+    private int _workerCount = 0;
 
     private void Awake()
     {
         initBuildingSO(commercialSO);
-        AssignRandomInComeMoveInCount();
     }
 
-    private void AddMoney(float amount)
-    {
-        GameManager.Instance.material += amount;
-    }
-
-    private void Update()
+    protected override void Update()
     {
         if (!isBuilt)
         {
             return;
         }
 
-        _timer += Time.deltaTime;
+        base.Update();
 
-        if (_timer > commercialSO.incomeInterval && currentProduction < commercialSO.production)
+        if (!IsEnoughWorkers(true))
+        {
+            int employAmount = (int)Mathf.Ceil(commercialSO.workerNeededAmount + commercialSO.workerNeededAmount * commercialSO.workerAmountThreshold - _workerCount);
+            _workerCount += GameManager.Instance.Employ(employAmount);
+        }
+
+        _timer += Time.deltaTime;
+        timerUntilDestruction += shouldBeDestroyed ? Time.deltaTime : 0;
+
+
+        if (_timer > commercialSO.productionRate)
         {   
             _timer = 0;
-            AssignRandomInComeMoveInCount();
-            currentProduction = Mathf.Clamp(currentProduction + _maxIncomePerInterval, 0, commercialSO.production);
-            GameManager.Instance.material += _maxIncomePerInterval;
+
+            if (GameManager.Instance.materials >= commercialSO.materialsNeededAmount && IsEnoughWorkers())
+            {
+                HideUI();
+                shouldBeDestroyed = false;
+                timerUntilDestruction = 0;
+                GameManager.Instance.products += commercialSO.productionAmount;
+                GameManager.Instance.materials -= commercialSO.materialsNeededAmount;
+            }
+            else
+            {
+                ShowUI();
+                shouldBeDestroyed = true;
+            }
         }
     }
 
-    private void AssignRandomInComeMoveInCount()
+    private void OnDestroy()
     {
-        _maxIncomePerInterval = Random.Range(0, commercialSO.production + 1 - currentProduction);
+        GameManager.Instance.Unemploy(_workerCount);
+    }
+
+    private bool IsEnoughWorkers(bool maxWorkers = false)
+    {
+        int neededWorkerCount = maxWorkers
+            ? (int)Mathf.Ceil(commercialSO.workerNeededAmount + commercialSO.workerNeededAmount * commercialSO.workerAmountThreshold)
+            : (int)Mathf.Ceil(commercialSO.workerNeededAmount - commercialSO.workerNeededAmount * commercialSO.workerAmountThreshold);
+
+        return _workerCount >= neededWorkerCount;
     }
 }

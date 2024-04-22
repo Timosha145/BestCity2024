@@ -9,10 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e6543086e5d609349a1999da904def13, type: 3}
-  m_Name: Residence 1
+  m_Script: {fileID: 11500000, guid: 39fe38cff7a5fc4449ba9e6e5f8191b3, type: 3}
+  m_Name: Industrial 1
   m_EditorClassIdentifier: 
-  <cost>k__BackingField: 100
+  <cost>k__BackingField: 150
   <waitUntilDestroying>k__BackingField: 60
-  <population>k__BackingField: 100
-  <timeToMoveIn>k__BackingField: 2
+  <workerNeededAmount>k__BackingField: 0
+  <workerAmountThreshold>k__BackingField: 0.1
+  <productionRate>k__BackingField: 2
+  <productionAmount>k__BackingField: 35

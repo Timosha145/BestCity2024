@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -13,6 +15,7 @@ public class PlacementSystem : MonoBehaviour
 
     private bool isBuilding = false;
     private GameObject currentBuilding;
+    private Road _road;
     private Vector3 _selectedGridPosition = Vector3.zero;
 
     public static PlacementSystem Instance { get; private set; }
@@ -29,7 +32,7 @@ public class PlacementSystem : MonoBehaviour
         }
     }
 
-    void Update()
+    private async void Update()
     {
         Vector3 mousePosition = inputManager.GetSelectedMapPosition();
         _selectedGridPosition = grid.CellToWorld(grid.WorldToCell(mousePosition)) + _offset;
@@ -37,20 +40,36 @@ public class PlacementSystem : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
-            isBuilding = !isBuilding;
+            await Build();
+        }
 
-            if (isBuilding)
-            {
-                currentBuilding = Instantiate(buildingPrefab, _selectedGridPosition, Quaternion.identity);
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Destroy(currentBuilding);
+            isBuilding = false;
+            currentBuilding = null; // Assigning null after destroying the current building
+        }
 
-                if (currentBuilding.TryGetComponent(out Building building))
-                {
-                    building.Select();
-                }
-            }
-            else
+        if (isBuilding && currentBuilding != null)
+        {
+            currentBuilding.transform.position = _selectedGridPosition;
+        }
+    }
+
+    private async Task Build()
+    {
+        isBuilding = !isBuilding;
+
+        if (isBuilding)
+        {
+            currentBuilding = Instantiate(buildingPrefab, _selectedGridPosition, Quaternion.identity);
+            currentBuilding?.TryGetComponent(out _road);
+        }
+        else
+        {
+            if (currentBuilding.TryGetComponent(out Building building))
             {
-                if (currentBuilding.TryGetComponent(out Building building) && building.CanBuild())
+                if (building.CanBuild())
                 {
                     building.isBuilt = true;
                     building.Pay();
@@ -60,26 +79,31 @@ public class PlacementSystem : MonoBehaviour
                 {
                     Destroy(currentBuilding);
                 }
-
-                currentBuilding = null;
             }
-        }
+            else if (currentBuilding.TryGetComponent(out Road road))
+            {
+                List<Road> roadsToRotate = new List<Road> { road };
+                roadsToRotate.AddRange(road.GetCollidingRoads(road.transform.position));
 
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            Destroy(currentBuilding);
-            isBuilding = false;
-            currentBuilding = null;
-        }
+                foreach (Road r in roadsToRotate)
+                {
+                    Road suitableRoad = r.GetSuitableRoad();
+                    GameObject newBuilding = ChangeBuilding(r.gameObject, suitableRoad.gameObject);
+                    Road newRoad = newBuilding.GetComponent<Road>();
+                    await Task.Delay(TimeSpan.FromSeconds(0.025f));
 
-        if (Input.GetKeyDown(KeyCode.R) && currentBuilding)
-        {
-            RotateBuilding(currentBuilding);
-        }
+                    for (int i = 0; i < 10; i++)
+                    {
+                        if (newRoad.AreNodesConnected())
+                        {
+                            break;
+                        }
 
-        if (isBuilding && currentBuilding != null)
-        {
-            currentBuilding.transform.position = _selectedGridPosition;
+                        RotateBuilding(newBuilding);
+                    }
+                }
+                Destroy(currentBuilding);
+            }
         }
     }
 
@@ -88,10 +112,9 @@ public class PlacementSystem : MonoBehaviour
         building.transform.Rotate(0f, 90f, 0f);
     }
 
-    public void ChangeBuilding(GameObject building)
+    private GameObject ChangeBuilding(GameObject oldBuilding, GameObject newBuilding)
     {
-        Destroy(currentBuilding);
-        buildingPrefab = building;
-        currentBuilding = Instantiate(buildingPrefab, _selectedGridPosition, Quaternion.identity);
+        Destroy(oldBuilding);
+        return Instantiate(newBuilding, oldBuilding.transform.position, Quaternion.identity);
     }
 }

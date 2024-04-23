@@ -7,6 +7,7 @@ using UnityEngine.UIElements;
 
 public class PlacementSystem : MonoBehaviour
 {
+    [SerializeField] public List<Road> roadVariants;
     [SerializeField] private GameObject cellIndicator;
     [SerializeField] private GameObject buildingPrefab;
     [SerializeField] private InputManager inputManager;
@@ -38,9 +39,14 @@ public class PlacementSystem : MonoBehaviour
         _selectedGridPosition = grid.CellToWorld(grid.WorldToCell(mousePosition)) + _offset;
         cellIndicator.transform.position = _selectedGridPosition;
 
-        if (Input.GetKeyDown(KeyCode.Mouse0))
+        if (Input.GetKeyDown(KeyCode.B))
         {
             await Build();
+        }
+
+        if (Input.GetKeyDown(KeyCode.R) && currentBuilding)
+        {
+            RotateBuilding(currentBuilding);
         }
 
         if (Input.GetKeyDown(KeyCode.Escape))
@@ -62,7 +68,7 @@ public class PlacementSystem : MonoBehaviour
 
         if (isBuilding)
         {
-            currentBuilding = Instantiate(buildingPrefab, _selectedGridPosition, Quaternion.identity);
+            currentBuilding = Instantiate(buildingPrefab, _selectedGridPosition + _offset, Quaternion.identity);
             currentBuilding?.TryGetComponent(out _road);
         }
         else
@@ -104,6 +110,8 @@ public class PlacementSystem : MonoBehaviour
                 }
                 Destroy(currentBuilding);
             }
+
+            currentBuilding = null;
         }
     }
 
@@ -112,7 +120,12 @@ public class PlacementSystem : MonoBehaviour
         building.transform.Rotate(0f, 90f, 0f);
     }
 
-    private GameObject ChangeBuilding(GameObject oldBuilding, GameObject newBuilding)
+    public void ChangePrefab(GameObject building)
+    {
+        buildingPrefab = building;
+    }
+
+    public GameObject ChangeBuilding(GameObject oldBuilding, GameObject newBuilding)
     {
         Destroy(oldBuilding);
         return Instantiate(newBuilding, oldBuilding.transform.position, Quaternion.identity);

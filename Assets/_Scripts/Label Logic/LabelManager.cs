@@ -13,31 +13,39 @@ public class LabelManager : MonoBehaviour
     [SerializeField] private Button _industrialBtn;
     [SerializeField] private Button _commercialBtn;
     [SerializeField] private Button _residentBtn;
+    [SerializeField] private Button _roadBtn;
 
     [SerializeField] private GameObject _industrial;
     [SerializeField] private GameObject _commercial;
     [SerializeField] private GameObject _residence;
+    [SerializeField] private GameObject _road;
 
     private void Start()
     {
         _industrialBtn.onClick.AddListener(ChangeIndustrial);
         _commercialBtn.onClick.AddListener(ChangeCommercial);
         _residentBtn.onClick.AddListener(ChangeResidence);
+        _roadBtn.onClick.AddListener(ChangeRoad);
+    }
+
+    private void ChangeRoad()
+    {
+        PlacementSystem.Instance.ChangePrefab(_road);
     }
 
     private void ChangeIndustrial()
     {
-        PlacementSystem.Instance.ChangeBuilding(_industrial);
+        PlacementSystem.Instance.ChangePrefab(_industrial);
     }
 
     private void ChangeCommercial()
     {
-        PlacementSystem.Instance.ChangeBuilding(_commercial);
+        PlacementSystem.Instance.ChangePrefab(_commercial);
     }
 
     private void ChangeResidence()
     {
-        PlacementSystem.Instance.ChangeBuilding(_residence);
+        PlacementSystem.Instance.ChangePrefab(_residence);
     }
 
     private void Update()

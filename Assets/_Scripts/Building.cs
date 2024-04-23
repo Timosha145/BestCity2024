@@ -36,6 +36,7 @@ public class Building : MonoBehaviour
     public void Pay()
     {
         GameManager.Instance.money -= _buildingSO.cost;
+        OnBuild();
     }
 
     public void Select()
@@ -57,4 +58,6 @@ public class Building : MonoBehaviour
     {
         _UIVisual.SetActive(false);
     }
+
+    protected virtual void OnBuild() { }
 }

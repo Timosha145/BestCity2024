@@ -27,8 +27,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0.000000021855694, y: 0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
+  m_LocalPosition: {x: 0, y: -0.0048, z: -0.4426}
+  m_LocalScale: {x: 0.1, y: 0.100245334, z: 0.099265754}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6149187643486788220}
@@ -101,6 +101,7 @@ MonoBehaviour:
   _selectVisual: {fileID: 2074520764759563444}
   _UIVisual: {fileID: 6511485886277412186}
   _timerLbl: {fileID: 8648849080482588221}
+  _buildingSO: {fileID: 0}
   isBuilt: 0
   <industrialSO>k__BackingField: {fileID: 11400000, guid: 55d46090a8993fa49844514953010662,
     type: 2}

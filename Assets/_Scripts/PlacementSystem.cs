@@ -14,6 +14,9 @@ public class PlacementSystem : MonoBehaviour
     [SerializeField] private Grid grid;
     [SerializeField] private Vector3 _offset;
 
+    [SerializeField] private Vector3 residentialOffset;
+    [SerializeField] private Vector3 commercialOffset;
+
     private bool isBuilding = false;
     private GameObject currentBuilding;
     private Road _road;
@@ -36,8 +39,8 @@ public class PlacementSystem : MonoBehaviour
     private async void Update()
     {
         Vector3 mousePosition = inputManager.GetSelectedMapPosition();
-        _selectedGridPosition = grid.CellToWorld(grid.WorldToCell(mousePosition)) + _offset;
-        cellIndicator.transform.position = _selectedGridPosition;
+        _selectedGridPosition = grid.CellToWorld(grid.WorldToCell(mousePosition));
+        cellIndicator.transform.position = _selectedGridPosition + _offset;
 
         if (Input.GetKeyDown(KeyCode.B))
         {
@@ -53,7 +56,7 @@ public class PlacementSystem : MonoBehaviour
         {
             Destroy(currentBuilding);
             isBuilding = false;
-            currentBuilding = null; // Assigning null after destroying the current building
+            currentBuilding = null;
         }
 
         if (isBuilding && currentBuilding != null)
@@ -68,8 +71,13 @@ public class PlacementSystem : MonoBehaviour
 
         if (isBuilding)
         {
-            currentBuilding = Instantiate(buildingPrefab, _selectedGridPosition + _offset, Quaternion.identity);
+            currentBuilding = Instantiate(buildingPrefab, _selectedGridPosition, Quaternion.identity);
             currentBuilding?.TryGetComponent(out _road);
+
+            if (currentBuilding.TryGetComponent(out Building building))
+            {
+                UpdateCursorIndicator(building._buildingSO);
+            }
         }
         else
         {
@@ -111,6 +119,8 @@ public class PlacementSystem : MonoBehaviour
                 Destroy(currentBuilding);
             }
 
+            ResetCursorIndicator();
+
             currentBuilding = null;
         }
     }
@@ -118,6 +128,20 @@ public class PlacementSystem : MonoBehaviour
     private void RotateBuilding(GameObject building)
     {
         building.transform.Rotate(0f, 90f, 0f);
+    }
+
+    public void UpdateCursorIndicator(BuildingSO buildingSO)
+    {
+        Vector3 cursorSize = new Vector3(buildingSO.widthX, 1f, buildingSO.lengthZ);
+        cellIndicator.transform.localScale = cursorSize;
+
+        cellIndicator.transform.position = _selectedGridPosition + _offset;
+    }
+
+    public void ResetCursorIndicator()
+    {
+        Vector3 cursorSize = new Vector3(1f, 1f, 1f);
+        cellIndicator.transform.localScale = cursorSize;
     }
 
     public void ChangePrefab(GameObject building)
@@ -131,3 +155,4 @@ public class PlacementSystem : MonoBehaviour
         return Instantiate(newBuilding, oldBuilding.transform.position, Quaternion.identity);
     }
 }
+

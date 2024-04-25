@@ -7,7 +7,7 @@ public class Building : MonoBehaviour
     [SerializeField] private GameObject _UIVisual;
     [SerializeField] private TextMeshProUGUI _timerLbl;
 
-    private BuildingSO _buildingSO;
+    public BuildingSO _buildingSO;
     protected float timerUntilDestruction = 0;
     protected bool shouldBeDestroyed = false;
 

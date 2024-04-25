@@ -14,5 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <cost>k__BackingField: 100
   <waitUntilDestroying>k__BackingField: 60
+  widthX: 2
+  lengthZ: 1
   <population>k__BackingField: 100
   <timeToMoveIn>k__BackingField: 2

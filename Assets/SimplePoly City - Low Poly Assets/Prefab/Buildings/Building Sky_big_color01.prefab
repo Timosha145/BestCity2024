@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3300000}
   - component: {fileID: 2300000}
   - component: {fileID: 336520689051381675}
+  - component: {fileID: 1440244528124939963}
   m_Layer: 0
   m_Name: Building Sky_big_color01
   m_TagString: Untagged
@@ -27,8 +28,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0.000000021855694, y: 0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
+  m_LocalPosition: {x: 0.002, y: 0.0086, z: 0.5105}
+  m_LocalScale: {x: 0.118719794, y: 0.09294451, z: 0.068156146}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7430293781237228560}
@@ -97,11 +98,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19b2d3825cb83aa42b16fb3832ae2d4f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buildingSO: {fileID: 0}
   _selectVisual: {fileID: 8105797938498967144}
+  _UIVisual: {fileID: 0}
+  _timerLbl: {fileID: 0}
   isBuilt: 0
   <residenceSO>k__BackingField: {fileID: 11400000, guid: ec37eb1221ff0e1479771c4f92d7da9e,
     type: 2}
+--- !u!65 &1440244528124939963
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100000}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 13.659739, y: 24.802341, z: 12.296448}
+  m_Center: {x: -0.0000023841858, y: 12.401167, z: 0.124479055}
 --- !u!1 &8105797938498967144
 GameObject:
   m_ObjectHideFlags: 0
@@ -198,8 +221,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19b2d3825cb83aa42b16fb3832ae2d4f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buildingSO: {fileID: 0}
   _selectVisual: {fileID: 0}
+  _UIVisual: {fileID: 0}
+  _timerLbl: {fileID: 0}
   isBuilt: 0
   <residenceSO>k__BackingField: {fileID: 11400000, guid: ec37eb1221ff0e1479771c4f92d7da9e,
     type: 2}

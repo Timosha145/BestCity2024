@@ -43,6 +43,7 @@ public class Building : MonoBehaviour
     public void Pay()
     {
         GameManager.Instance.money -= _buildingSO.cost;
+        OnBuild();
     }
 
     public void Select()
@@ -72,4 +73,7 @@ public class Building : MonoBehaviour
             _renderer.material = material;
         }
     }
+
+    protected virtual void OnBuild() { }
+
 }

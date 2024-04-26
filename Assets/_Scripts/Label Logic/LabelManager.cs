@@ -4,11 +4,14 @@ using UnityEngine.UI;
 
 public class LabelManager : MonoBehaviour
 {
+    [Header("Global Settings")]
+    [Range(0f, 1f)]
+    [SerializeField] private float _lerp = 0.1f;
+
     [SerializeField] private TextMeshProUGUI _labelMoney;
     [SerializeField] private TextMeshProUGUI _labelPopulation;
     [SerializeField] private TextMeshProUGUI _materialsLabel;
     [SerializeField] private TextMeshProUGUI _productsLabel;
-    [SerializeField] private TextMeshProUGUI _employedLabel;
 
     [SerializeField] private Button _industrialBtn;
     [SerializeField] private Button _commercialBtn;
@@ -19,6 +22,16 @@ public class LabelManager : MonoBehaviour
     [SerializeField] private GameObject _commercial;
     [SerializeField] private GameObject _residence;
     [SerializeField] private GameObject _road;
+
+    [Header("Employed Pie Chart")]
+    [SerializeField] private Image _pieChartEmployed;
+
+    [Header("Needs Charts")]
+    [SerializeField] private Image _residenceNeed;
+    [SerializeField] private Image _commercialNeed;
+    [SerializeField] private Image _industrialNeed;
+    [SerializeField] private Image _jobNeed;
+
 
     private void Start()
     {
@@ -54,6 +67,46 @@ public class LabelManager : MonoBehaviour
         _labelPopulation.text = GameManager.Instance.population.ToString();
         _materialsLabel.text = GameManager.Instance.materials.ToString();
         _productsLabel.text = GameManager.Instance.products.ToString();
-        _employedLabel.text = GameManager.Instance.employed.ToString();
+        UpdateNeedCharts();
+        UpdateEmployedPieChart();
+    }
+
+    private void UpdateNeedCharts()
+    {
+        if (GameManager.Instance.population > 0)
+        {
+            float jobs = GameManager.Instance.jobCount > 0
+                ? 1f - ((float)GameManager.Instance.jobCount / (float)GameManager.Instance.population)
+                : 1f;
+
+            float fill = jobs > 1f ? 0f : jobs;
+
+            _jobNeed.fillAmount = Mathf.MoveTowards(_jobNeed.fillAmount, fill, _lerp * Time.deltaTime);
+        }
+
+        if (GameManager.Instance.jobCount > 0)
+        {
+            float workers = GameManager.Instance.population > 0
+                ? 1f - ((float)GameManager.Instance.population / (float)GameManager.Instance.jobCount)
+                : 1f;
+
+            float fill = workers > 1f ? 0f : workers;
+
+            Debug.Log(workers + ", " + fill);
+            _residenceNeed.fillAmount = Mathf.MoveTowards(_residenceNeed.fillAmount, fill, _lerp * Time.deltaTime);
+        }
+    }
+
+    private void UpdateEmployedPieChart()
+    {
+        if (GameManager.Instance.population > 0)
+        {
+            float employed = (float)GameManager.Instance.employed / (float)GameManager.Instance.population;
+            float fill = GameManager.Instance.employed > 0
+                ? Mathf.Clamp(employed, 0f, 1f)
+                : 0;
+
+            _pieChartEmployed.fillAmount = Mathf.MoveTowards(_pieChartEmployed.fillAmount, fill, _lerp * Time.deltaTime);
+        } 
     }
 }

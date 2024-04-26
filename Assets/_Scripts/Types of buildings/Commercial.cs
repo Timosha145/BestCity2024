@@ -22,7 +22,7 @@ public class Commercial : Building
 
         if (!IsEnoughWorkers(true))
         {
-            int employAmount = (int)Mathf.Ceil(commercialSO.workerNeededAmount + commercialSO.workerNeededAmount * commercialSO.workerAmountThreshold - _workerCount);
+            int employAmount = getMaximumJobCount() - _workerCount;
             _workerCount += GameManager.Instance.Employ(employAmount);
         }
 
@@ -52,6 +52,7 @@ public class Commercial : Building
 
     private void OnDestroy()
     {
+        GameManager.Instance.jobCount -= getMaximumJobCount();
         GameManager.Instance.Unemploy(_workerCount);
     }
 
@@ -62,5 +63,15 @@ public class Commercial : Building
             : (int)Mathf.Ceil(commercialSO.workerNeededAmount - commercialSO.workerNeededAmount * commercialSO.workerAmountThreshold);
 
         return _workerCount >= neededWorkerCount;
+    }
+
+    private int getMaximumJobCount()
+    {
+        return (int)Mathf.Ceil(commercialSO.workerNeededAmount + commercialSO.workerNeededAmount * commercialSO.workerAmountThreshold);
+    }
+
+    protected override void OnBuild()
+    {
+        GameManager.Instance.jobCount += getMaximumJobCount();
     }
 }

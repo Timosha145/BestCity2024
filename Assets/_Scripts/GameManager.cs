@@ -6,6 +6,7 @@ public class GameManager : MonoBehaviour
 
     [field: SerializeField] public int population { get; set; }
     [field: SerializeField] public int employed { get; private set; }
+    [field: SerializeField] public float jobCount { get; set; }
     [field: SerializeField] public float money { get; set; }
     [field: SerializeField] public float materials { get; set; }
     [field: SerializeField] public float products { get; set; }

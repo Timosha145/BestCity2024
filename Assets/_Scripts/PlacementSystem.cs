@@ -73,6 +73,7 @@ public class PlacementSystem : MonoBehaviour
             Destroy(currentObject);
             ResetCursorIndicator();
             isBuilding = false;
+            canBuild = true;
             currentObject = null;
         }
 

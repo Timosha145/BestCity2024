@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2300000}
   - component: {fileID: -4092121759639255226}
   - component: {fileID: 3808053240795910324}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Road Intersection_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -29,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0.000000021855694, y: 0, z: -0, w: 1}
   m_LocalPosition: {x: -8, y: 0.01, z: 4}
-  m_LocalScale: {x: 0.104, y: 0.104, z: 0.104}
+  m_LocalScale: {x: 0.052, y: 0.052, z: 0.052}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 7151805927045787885}
@@ -101,12 +101,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 694f323c8c6d2a14087bbf379abdcc30, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _checkNodesRadius: 1.5
+  _checkNodesRadius: 0.65
   <nodes>k__BackingField:
   - {fileID: 1464527335684413918}
   - {fileID: 2032593830454338431}
   - {fileID: 6404241688247960137}
   - {fileID: 6201105743218567988}
+  <type>k__BackingField: 3
+  <crossingVersion>k__BackingField: {fileID: 0}
 --- !u!136 &3808053240795910324
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -141,7 +143,7 @@ GameObject:
   - component: {fileID: 1733660177868990155}
   - component: {fileID: 2032593830454338431}
   - component: {fileID: 1292969047726645223}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: node_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -209,7 +211,7 @@ GameObject:
   - component: {fileID: 7151805927045787885}
   - component: {fileID: 1464527335684413918}
   - component: {fileID: 5680159481488947527}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: node_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -277,7 +279,7 @@ GameObject:
   - component: {fileID: 2113289425239470610}
   - component: {fileID: 6201105743218567988}
   - component: {fileID: 5759430415732000783}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: node_4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -345,7 +347,7 @@ GameObject:
   - component: {fileID: 3220067350215174161}
   - component: {fileID: 6404241688247960137}
   - component: {fileID: 5370281025725425461}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: node_3
   m_TagString: Untagged
   m_Icon: {fileID: 0}

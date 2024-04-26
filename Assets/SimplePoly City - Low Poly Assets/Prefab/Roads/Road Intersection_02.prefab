@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2300000}
   - component: {fileID: -2129837569763762710}
   - component: {fileID: 5683524667413330961}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Road Intersection_02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -29,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0.000000021855694, y: 0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.104, y: 0.104, z: 0.104}
+  m_LocalScale: {x: 0.052, y: 0.052, z: 0.052}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 3845382207203333092}
@@ -101,13 +101,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 694f323c8c6d2a14087bbf379abdcc30, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _checkNodesRadius: 1.5
+  _checkNodesRadius: 0.65
   <nodes>k__BackingField:
   - {fileID: 7562675705076813944}
   - {fileID: 7878752745737305518}
   - {fileID: 3663986635760097565}
   - {fileID: 7264716069547869887}
-  <type>k__BackingField: 2
+  <type>k__BackingField: 3
   <crossingVersion>k__BackingField: {fileID: -4092121759639255226, guid: 47ef019eb3bddab469e56e5a31eebf68,
     type: 3}
 --- !u!136 &5683524667413330961
@@ -144,7 +144,7 @@ GameObject:
   - component: {fileID: 8764073439039698148}
   - component: {fileID: 3663986635760097565}
   - component: {fileID: 142311802007982444}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: node_3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -212,7 +212,7 @@ GameObject:
   - component: {fileID: 4604590931773539941}
   - component: {fileID: 7878752745737305518}
   - component: {fileID: 5711315613525985350}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: node_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -280,7 +280,7 @@ GameObject:
   - component: {fileID: 3845382207203333092}
   - component: {fileID: 7562675705076813944}
   - component: {fileID: 5874692279801096215}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: node_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -348,7 +348,7 @@ GameObject:
   - component: {fileID: 6237341996243427806}
   - component: {fileID: 7264716069547869887}
   - component: {fileID: 3191640485733406763}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: node_4
   m_TagString: Untagged
   m_Icon: {fileID: 0}

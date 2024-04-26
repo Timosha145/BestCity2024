@@ -12,20 +12,30 @@ public class PlacementSystem : MonoBehaviour
     [SerializeField] private GameObject buildingPrefab;
     [SerializeField] private InputManager inputManager;
     [SerializeField] private Grid grid;
+    [Header("Offset")]
     [SerializeField] private Vector3 _offset;
+    [SerializeField] private Vector3 _extraOffset;
+    [SerializeField] private Vector3 _cursorDefaultOffset;
+    [Header("Materials")]
+    [SerializeField] private Material _selectMaterial;
+    [SerializeField] private Material _selectDangerMaterial;
+    [Header("Layers")]
+    [SerializeField] private LayerMask _buildingLayer;
 
-    [SerializeField] private Vector3 residentialOffset;
-    [SerializeField] private Vector3 commercialOffset;
-
+    private Vector3 _cursorDefaultSize = Vector3.zero;
     private bool isBuilding = false;
-    private GameObject currentBuilding;
+    private GameObject currentObject;
     private Road _road;
     private Vector3 _selectedGridPosition = Vector3.zero;
+    private Building _currentBuilding;
+    private bool canBuild = true;
 
     public static PlacementSystem Instance { get; private set; }
 
     private void Awake()
     {
+        _cursorDefaultSize = cellIndicator.transform.localScale;
+
         if (!Instance)
         {
             Instance = this;
@@ -39,62 +49,99 @@ public class PlacementSystem : MonoBehaviour
     private async void Update()
     {
         Vector3 mousePosition = inputManager.GetSelectedMapPosition();
-        _selectedGridPosition = grid.CellToWorld(grid.WorldToCell(mousePosition));
-        cellIndicator.transform.position = _selectedGridPosition + _offset;
+
+        _selectedGridPosition = currentObject && !isObjectSquare() && (currentObject.transform.eulerAngles.y == 90 || currentObject.transform.eulerAngles.y == 270)
+            ? grid.CellToWorld(grid.WorldToCell(mousePosition)) + new Vector3(0.5f, 0, 0.5f)
+            : grid.CellToWorld(grid.WorldToCell(mousePosition));
+
+        cellIndicator.transform.position = IsCursorDefaultSize()
+                ? _selectedGridPosition + _offset + _cursorDefaultOffset
+                : _selectedGridPosition + _offset;
 
         if (Input.GetKeyDown(KeyCode.B))
         {
             await Build();
         }
 
-        if (Input.GetKeyDown(KeyCode.R) && currentBuilding)
+        if (Input.GetKeyDown(KeyCode.R) && currentObject)
         {
-            RotateBuilding(currentBuilding);
+            RotateBuilding(currentObject);
         }
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            Destroy(currentBuilding);
+            Destroy(currentObject);
+            ResetCursorIndicator();
             isBuilding = false;
-            currentBuilding = null;
+            currentObject = null;
         }
 
-        if (isBuilding && currentBuilding != null)
+        if (isBuilding && currentObject != null)
         {
-            currentBuilding.transform.position = _selectedGridPosition;
+            cellIndicator.transform.rotation = currentObject.transform.rotation;
+            currentObject.transform.position = IsCursorDefaultSize()
+                ? _selectedGridPosition + _offset + _cursorDefaultOffset
+                : _selectedGridPosition + _offset;
+
+            canBuild = !isBuildingColliding() && (_road || isCollidingWithRoad());
+
+            if (canBuild)
+            {
+                _currentBuilding?.ChangeSelectMaterial(_selectMaterial);
+                _road?.ChangeSelectMaterial(_selectMaterial);
+            }
+            else
+            {
+                currentObject.transform.position = currentObject.transform.position + _extraOffset;
+                _currentBuilding?.ChangeSelectMaterial(_selectDangerMaterial);
+                _road?.ChangeSelectMaterial(_selectDangerMaterial);
+            }
+
+            if (_currentBuilding)
+            {
+                _currentBuilding.Select();
+                UpdateCursorIndicator(_currentBuilding._buildingSO);
+            }
         }
     }
 
     private async Task Build()
     {
+        if (!canBuild)
+        {
+            return;
+        }
+
         isBuilding = !isBuilding;
 
         if (isBuilding)
         {
-            currentBuilding = Instantiate(buildingPrefab, _selectedGridPosition, Quaternion.identity);
-            currentBuilding?.TryGetComponent(out _road);
+            currentObject = Instantiate(buildingPrefab, _selectedGridPosition, Quaternion.identity);
+            currentObject?.TryGetComponent(out _road);
 
-            if (currentBuilding.TryGetComponent(out Building building))
+            if (currentObject.TryGetComponent(out Building building))
             {
-                UpdateCursorIndicator(building._buildingSO);
+                _currentBuilding = building;
+                building.Select();
+                UpdateCursorIndicator(building?._buildingSO);
             }
         }
         else
         {
-            if (currentBuilding.TryGetComponent(out Building building))
+            if (_currentBuilding)
             {
-                if (building.CanBuild())
+                if (_currentBuilding.CanBuild())
                 {
-                    building.isBuilt = true;
-                    building.Pay();
-                    building.Unselect();
+                    _currentBuilding.isBuilt = true;
+                    _currentBuilding.Pay();
+                    _currentBuilding.Unselect();
                 }
                 else
                 {
-                    Destroy(currentBuilding);
+                    Destroy(currentObject);
                 }
             }
-            else if (currentBuilding.TryGetComponent(out Road road))
+            else if (currentObject.TryGetComponent(out Road road))
             {
                 List<Road> roadsToRotate = new List<Road> { road };
                 roadsToRotate.AddRange(road.GetCollidingRoads(road.transform.position));
@@ -116,18 +163,69 @@ public class PlacementSystem : MonoBehaviour
                         RotateBuilding(newBuilding);
                     }
                 }
-                Destroy(currentBuilding);
+                Destroy(currentObject);
             }
 
             ResetCursorIndicator();
-
-            currentBuilding = null;
+            _currentBuilding = null;
+            currentObject = null;
         }
+    }
+
+    private bool isObjectSquare()
+    {
+        return _currentBuilding && _currentBuilding._buildingSO.widthX == _currentBuilding._buildingSO.lengthZ || _road;
+    }
+
+    private bool isBuildingColliding()
+    {
+        if (!currentObject)
+        {
+            return false;
+        }
+
+        Collider[] colliders = Physics.OverlapBox(cellIndicator.transform.position, cellIndicator.transform.localScale * 0.4f,
+            cellIndicator.transform.rotation, _buildingLayer);
+
+        if (colliders.Length == 1 && colliders[0].transform == currentObject.transform)
+        {
+            return false;
+        }
+        else
+        {
+            return colliders.Length > 0;
+        }
+    }
+
+    private bool isCollidingWithRoad()
+    {
+        if (!_currentBuilding)
+        {
+            return false;
+        }
+
+        Collider[] colliders = Physics.OverlapBox(cellIndicator.transform.position, cellIndicator.transform.localScale * 0.6f,
+            cellIndicator.transform.rotation, _buildingLayer);
+
+        for (int i = 0; i < colliders.Length; i++)
+        {
+            if (colliders[i] && colliders[i].TryGetComponent(out Road road))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private void RotateBuilding(GameObject building)
     {
         building.transform.Rotate(0f, 90f, 0f);
+    }
+
+    private bool IsCursorDefaultSize()
+    {
+        return cellIndicator.transform.localScale == _cursorDefaultSize;
     }
 
     public void UpdateCursorIndicator(BuildingSO buildingSO)
@@ -153,6 +251,12 @@ public class PlacementSystem : MonoBehaviour
     {
         Destroy(oldBuilding);
         return Instantiate(newBuilding, oldBuilding.transform.position, Quaternion.identity);
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = new Color(1, 0, 0, 0.5f);
+        Gizmos.DrawCube(cellIndicator.transform.position, cellIndicator.transform.localScale * 0.8f);
     }
 }
 

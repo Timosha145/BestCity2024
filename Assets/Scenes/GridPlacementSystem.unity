@@ -302,13 +302,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2177f707403cae4ea64aecfe6d4961c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  roadVariants: []
+  roadVariants:
+  - {fileID: -7833096561946685773, guid: 8b3300d2ba52ecf409c9523f2eff5bbd, type: 3}
+  - {fileID: -2129837569763762710, guid: e5a98a4c41704e24eb7e4dafcc7c42b4, type: 3}
+  - {fileID: 1718838562879863240, guid: 4f32dfddb033d3e40b5841bc53cc1689, type: 3}
+  - {fileID: 4200366209694117345, guid: 5dca1204e7e935d408728950a2ad997e, type: 3}
+  - {fileID: 2132590312594381789, guid: 7bee8d1373230ef4882d6dc0a63b35df, type: 3}
+  - {fileID: -6657088767741410241, guid: 11b412f2ff905c341be6af606611e4a3, type: 3}
   cellIndicator: {fileID: 2061847798}
   buildingPrefab: {fileID: 100000, guid: 121f662ea65e2cf40a50c66470757a9e, type: 3}
   inputManager: {fileID: 685019696}
   grid: {fileID: 551200190}
-  residentialOffset: {x: 0, y: 0, z: 0}
-  commercialOffset: {x: 0, y: 0, z: 0}
+  _offset: {x: 0, y: 0.01, z: 0}
+  _extraOffset: {x: 0, y: 0.05, z: 0}
+  _cursorDefaultOffset: {x: 0.5, y: 0, z: 0}
+  _selectMaterial: {fileID: 2100000, guid: 8ceba338a50e1774299260c4fb771698, type: 2}
+  _selectDangerMaterial: {fileID: 2100000, guid: cfe6fd32e89d04140a252a8a122ae76e,
+    type: 2}
+  _buildingLayer:
+    serializedVersion: 2
+    m_Bits: 8
 --- !u!1 &235826876
 GameObject:
   m_ObjectHideFlags: 0
@@ -479,7 +492,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
-  m_LocalRotation: {x: 0.38268346, y: 0.00000002248122, z: -0.000000009312027, w: 0.92387956}
+  m_LocalRotation: {x: 0.38268346, y: -0.000000022481217, z: 0.000000009312026, w: 0.92387956}
   m_LocalPosition: {x: 0, y: 10, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1131,7 +1144,7 @@ GameObject:
   - component: {fileID: 682381551}
   - component: {fileID: 682381550}
   - component: {fileID: 682381549}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Plane
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1257,7 +1270,7 @@ MonoBehaviour:
   sceneCamera: {fileID: 330585545}
   placementLayermask:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 64
 --- !u!4 &685019697
 Transform:
   m_ObjectHideFlags: 0
@@ -1602,7 +1615,7 @@ PrefabInstance:
     - target: {fileID: 3952697397410380797, guid: 1a58cd6aa9af4a348a27868ec16a4596,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3952697397410380797, guid: 1a58cd6aa9af4a348a27868ec16a4596,
         type: 3}
@@ -1612,7 +1625,7 @@ PrefabInstance:
     - target: {fileID: 3952697397410380797, guid: 1a58cd6aa9af4a348a27868ec16a4596,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4217279997386698761, guid: 1a58cd6aa9af4a348a27868ec16a4596,
         type: 3}
@@ -2035,7 +2048,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 72
+  m_fontSize: 42.95
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -2834,7 +2847,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 72
+  m_fontSize: 42.95
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -3220,7 +3233,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2129153683}
-  m_LocalRotation: {x: 0.38268346, y: 0.00000002248122, z: -0.000000009312027, w: 0.92387956}
+  m_LocalRotation: {x: 0.38268346, y: -0.000000022481217, z: 0.000000009312026, w: 0.92387956}
   m_LocalPosition: {x: 0, y: 10, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0

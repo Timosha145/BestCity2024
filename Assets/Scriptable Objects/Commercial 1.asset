@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: Commercial 1
   m_EditorClassIdentifier: 
   <cost>k__BackingField: 200
-  <waitUntilDestroying>k__BackingField: 15
+  <waitUntilDestroying>k__BackingField: 60
   widthX: 2
-  lengthZ: 3
+  lengthZ: 1
   <workerNeededAmount>k__BackingField: 20
   <workerAmountThreshold>k__BackingField: 0.1
   <materialsNeededAmount>k__BackingField: 15

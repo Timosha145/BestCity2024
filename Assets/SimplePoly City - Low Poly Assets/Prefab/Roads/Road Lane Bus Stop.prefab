@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3300000}
   - component: {fileID: 2300000}
   - component: {fileID: 4273736511879374282}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Road Lane Bus Stop
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -102,7 +102,8 @@ MonoBehaviour:
   <nodes>k__BackingField:
   - {fileID: 1346088893897837592}
   - {fileID: 1593397859429144943}
-  <roadPrefab>k__BackingField: {fileID: 4273736511879374282}
+  <type>k__BackingField: 3
+  <crossingVersion>k__BackingField: {fileID: 0}
 --- !u!1 &5513285091749960770
 GameObject:
   m_ObjectHideFlags: 0
@@ -114,7 +115,7 @@ GameObject:
   - component: {fileID: 206094318394357285}
   - component: {fileID: 1593397859429144943}
   - component: {fileID: 8586644591178977090}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: node_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -182,7 +183,7 @@ GameObject:
   - component: {fileID: 4645924602307492038}
   - component: {fileID: 1346088893897837592}
   - component: {fileID: 3969222798344807517}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: node_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}

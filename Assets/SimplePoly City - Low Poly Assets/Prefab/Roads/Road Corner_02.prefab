@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2300000}
   - component: {fileID: -7833096561946685773}
   - component: {fileID: -5348887711538596088}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Road Corner_02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -29,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0.000000021855694, y: 0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.104, y: 0.104, z: 0.104}
+  m_LocalScale: {x: 0.052, y: 0.052, z: 0.052}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 1959075037692821219}
@@ -99,7 +99,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 694f323c8c6d2a14087bbf379abdcc30, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _checkNodesRadius: 1.5
+  _checkNodesRadius: 0.65
   <nodes>k__BackingField:
   - {fileID: 6190457412474966398}
   - {fileID: 4277972347796683734}
@@ -140,7 +140,7 @@ GameObject:
   - component: {fileID: 1959075037692821219}
   - component: {fileID: 6190457412474966398}
   - component: {fileID: 440308079086103416}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: node_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -208,7 +208,7 @@ GameObject:
   - component: {fileID: 6228281322678928405}
   - component: {fileID: 4277972347796683734}
   - component: {fileID: 585445497239333910}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: node_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}

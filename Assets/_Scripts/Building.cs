@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -10,8 +11,14 @@ public class Building : MonoBehaviour
     public BuildingSO _buildingSO;
     protected float timerUntilDestruction = 0;
     protected bool shouldBeDestroyed = false;
+    private Renderer _renderer;
 
     public bool isBuilt = false;
+
+    private void Start()
+    {
+        _renderer = _selectVisual?.GetComponent<Renderer>();
+    }
 
     protected virtual void Update()
     {
@@ -56,5 +63,13 @@ public class Building : MonoBehaviour
     public void HideUI()
     {
         _UIVisual.SetActive(false);
+    }
+
+    public void ChangeSelectMaterial(Material material)
+    {
+        if (_renderer && _renderer.material != material)
+        {
+            _renderer.material = material;
+        }
     }
 }

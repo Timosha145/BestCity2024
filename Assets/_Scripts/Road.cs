@@ -7,7 +7,7 @@ using Random = UnityEngine.Random;
 
 public class Road : MonoBehaviour
 {
-    const float STRAIGHT_ROAD_MIN_LENGTH = 3f;
+    const float STRAIGHT_ROAD_MIN_LENGTH = 1.5f;
     const float CHANCE_CROSSING_ROAD = 0.2f;
 
     [SerializeField, Range(0f, 5f)] private float _checkNodesRadius = 1.5f;
@@ -15,13 +15,20 @@ public class Road : MonoBehaviour
     [field: SerializeField] public RoadType type { get; private set; } = RoadType.Other;
     [field: SerializeField] public Road crossingVersion { get; private set; }
 
+    private Renderer _renderer;
     public List<Road> collidingRoads { get; private set; } = new List<Road>();
 
     public enum RoadType
     {
         Corner,
         Straight,
+        Preview,
         Other
+    }
+
+    private void Start()
+    {
+        _renderer = GetComponent<Renderer>();
     }
 
     public List<Road> GetCollidingRoads(Vector3 position)
@@ -60,7 +67,6 @@ public class Road : MonoBehaviour
             else if (road.nodes.Count == collidingRodes.Count)
             {
                 float chance = Random.Range(0, 1f);
-                Debug.Log($"C: [{chance}]");
                 return Random.Range(0, 1f) <= CHANCE_CROSSING_ROAD ? road.crossingVersion ?? road : road;
             }
 
@@ -78,5 +84,13 @@ public class Road : MonoBehaviour
     {
         Gizmos.color = new Color(0f, 0f, 1f, 0.3f);
         Gizmos.DrawSphere(transform.position, _checkNodesRadius);
+    }
+
+    public void ChangeSelectMaterial(Material material)
+    {
+        if (type == RoadType.Preview && _renderer && _renderer.material != material)
+        {
+            _renderer.material = material;
+        }
     }
 }

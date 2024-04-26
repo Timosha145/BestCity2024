@@ -12,7 +12,8 @@ GameObject:
   - component: {fileID: 3300000}
   - component: {fileID: 2300000}
   - component: {fileID: 2033528899828287413}
-  m_Layer: 0
+  - component: {fileID: 5221597389390215931}
+  m_Layer: 3
   m_Name: Building_Auto Service
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -28,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0.000000021855694, y: 0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.1, y: 0.1, z: 0.3}
+  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8119700850443399880}
@@ -105,6 +106,27 @@ MonoBehaviour:
   isBuilt: 0
   <commercialSO>k__BackingField: {fileID: 11400000, guid: 688fd8549c9d88a4b985b3932dea3d93,
     type: 2}
+--- !u!65 &5221597389390215931
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100000}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 18.271511, y: 6.9995446, z: 8.263669}
+  m_Center: {x: -0.22107792, y: 3.5002534, z: 0.049095154}
 --- !u!1 &6639094390470269758
 GameObject:
   m_ObjectHideFlags: 0
@@ -116,7 +138,7 @@ GameObject:
   - component: {fileID: 6781414105869752718}
   - component: {fileID: 7868206266760085594}
   - component: {fileID: 4646666063405337410}
-  m_Layer: 5
+  m_Layer: 3
   m_Name: Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -192,7 +214,7 @@ GameObject:
   - component: {fileID: 2001306068900497277}
   - component: {fileID: 8135768635807243641}
   - component: {fileID: 3740629876054606882}
-  m_Layer: 5
+  m_Layer: 3
   m_Name: Timer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -329,7 +351,7 @@ GameObject:
   - component: {fileID: 3944649527521757075}
   - component: {fileID: 6530389934584326220}
   - component: {fileID: 33941463274466903}
-  m_Layer: 5
+  m_Layer: 3
   m_Name: UI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -345,7 +367,7 @@ RectTransform:
   m_GameObject: {fileID: 7844991937128545855}
   m_LocalRotation: {x: -0.000000021855694, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: -0}
-  m_LocalScale: {x: 10, y: 10, z: 10}
+  m_LocalScale: {x: 10, y: 10, z: 3.3}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6781414105869752718}
@@ -445,7 +467,7 @@ GameObject:
   - component: {fileID: 8119700850443399880}
   - component: {fileID: 5710446170115997562}
   - component: {fileID: 5849714694264274842}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Selected
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -12,7 +12,8 @@ GameObject:
   - component: {fileID: 3300000}
   - component: {fileID: 2300000}
   - component: {fileID: -4254690812410727116}
-  m_Layer: 0
+  - component: {fileID: 2301386168960406313}
+  m_Layer: 3
   m_Name: Building_Factory
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -28,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0.000000021855694, y: 0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: -0.0048, z: -0.4426}
-  m_LocalScale: {x: 0.1, y: 0.100245334, z: 0.099265754}
+  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6149187643486788220}
@@ -105,6 +106,27 @@ MonoBehaviour:
   isBuilt: 0
   <industrialSO>k__BackingField: {fileID: 11400000, guid: 55d46090a8993fa49844514953010662,
     type: 2}
+--- !u!65 &2301386168960406313
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100000}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 16.400005, y: 18.970465, z: 27.500004}
+  m_Center: {x: -0.0000014305115, y: 9.485232, z: -0.5269308}
 --- !u!1 &1106680485564590030
 GameObject:
   m_ObjectHideFlags: 0
@@ -116,7 +138,7 @@ GameObject:
   - component: {fileID: 6635976116014974592}
   - component: {fileID: 1136568299382399417}
   - component: {fileID: 5951192015257949647}
-  m_Layer: 5
+  m_Layer: 3
   m_Name: Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -192,7 +214,7 @@ GameObject:
   - component: {fileID: 6149187643486788220}
   - component: {fileID: 3903195624427313712}
   - component: {fileID: 7891604048534480996}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Selected
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -275,7 +297,7 @@ GameObject:
   - component: {fileID: 6804443138145788884}
   - component: {fileID: 6973694224099218817}
   - component: {fileID: 8648849080482588221}
-  m_Layer: 5
+  m_Layer: 3
   m_Name: Timer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -412,7 +434,7 @@ GameObject:
   - component: {fileID: 6066851521001670970}
   - component: {fileID: 8796988886593867868}
   - component: {fileID: 8421088683145018930}
-  m_Layer: 5
+  m_Layer: 3
   m_Name: UI
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -8,7 +8,7 @@ public class Building : MonoBehaviour
     [SerializeField] private GameObject _UIVisual;
     [SerializeField] private TextMeshProUGUI _timerLbl;
 
-    public BuildingSO _buildingSO;
+    public BuildingSO buildingSO { get; private set; }
     protected float timerUntilDestruction = 0;
     protected bool shouldBeDestroyed = false;
     private Renderer _renderer;
@@ -22,9 +22,9 @@ public class Building : MonoBehaviour
 
     protected virtual void Update()
     {
-        _timerLbl.text = $"{Mathf.Ceil(_buildingSO.waitUntilDestroying - timerUntilDestruction)}s";
+        _timerLbl.text = $"{Mathf.Ceil(buildingSO.waitUntilDestroying - timerUntilDestruction)}s";
 
-        if (timerUntilDestruction >= _buildingSO.waitUntilDestroying && shouldBeDestroyed)
+        if (timerUntilDestruction >= buildingSO.waitUntilDestroying && shouldBeDestroyed)
         {
             Destroy(gameObject);
         }
@@ -32,17 +32,17 @@ public class Building : MonoBehaviour
 
     protected void initBuildingSO(BuildingSO buildingSO)
     {
-        _buildingSO = buildingSO;
+        this.buildingSO = buildingSO;
     }
 
     public bool CanBuild()
     {
-        return _buildingSO.cost <= GameManager.Instance.money;
+        return buildingSO.cost <= GameManager.Instance.money;
     }
 
     public void Pay()
     {
-        GameManager.Instance.money -= _buildingSO.cost;
+        GameManager.Instance.money -= buildingSO.cost;
         OnBuild();
     }
 

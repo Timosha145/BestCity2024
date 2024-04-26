@@ -101,7 +101,7 @@ public class PlacementSystem : MonoBehaviour
             if (_currentBuilding)
             {
                 _currentBuilding.Select();
-                UpdateCursorIndicator(_currentBuilding._buildingSO);
+                UpdateCursorIndicator(_currentBuilding.buildingSO);
             }
         }
     }
@@ -124,7 +124,7 @@ public class PlacementSystem : MonoBehaviour
             {
                 _currentBuilding = building;
                 building.Select();
-                UpdateCursorIndicator(building?._buildingSO);
+                UpdateCursorIndicator(building?.buildingSO);
             }
         }
         else
@@ -175,7 +175,7 @@ public class PlacementSystem : MonoBehaviour
 
     private bool isObjectSquare()
     {
-        return _currentBuilding && _currentBuilding._buildingSO.widthX == _currentBuilding._buildingSO.lengthZ || _road;
+        return _currentBuilding && _currentBuilding.buildingSO.widthX == _currentBuilding.buildingSO.lengthZ || _road;
     }
 
     private bool isBuildingColliding()

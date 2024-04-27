@@ -63,7 +63,7 @@ public class LabelManager : MonoBehaviour
 
     private void Update()
     {
-        _labelMoney.text = GameManager.Instance.money.ToString() + "$";
+        _labelMoney.text = GameManager.Instance.money.ToString("N0");
         _labelPopulation.text = GameManager.Instance.population.ToString();
         _materialsLabel.text = GameManager.Instance.materials.ToString();
         _productsLabel.text = GameManager.Instance.products.ToString();
@@ -92,7 +92,6 @@ public class LabelManager : MonoBehaviour
 
             float fill = workers > 1f ? 0f : workers;
 
-            Debug.Log(workers + ", " + fill);
             _residenceNeed.fillAmount = Mathf.MoveTowards(_residenceNeed.fillAmount, fill, _lerp * Time.deltaTime);
         }
     }

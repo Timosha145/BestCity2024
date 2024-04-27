@@ -8,10 +8,8 @@ using UnityEngine.UIElements;
 public class PlacementSystem : MonoBehaviour
 {
     [SerializeField] public List<Road> roadVariants;
-    [SerializeField] private GameObject cellIndicator;
     [SerializeField] private GameObject buildingPrefab;
     [SerializeField] private InputManager inputManager;
-    [SerializeField] private Grid grid;
     [Header("Offset")]
     [SerializeField] private Vector3 _offset;
     [SerializeField] private Vector3 _extraOffset;
@@ -21,14 +19,19 @@ public class PlacementSystem : MonoBehaviour
     [SerializeField] private Material _selectDangerMaterial;
     [Header("Layers")]
     [SerializeField] private LayerMask _buildingLayer;
+    [Header("Grid System")]
+    [SerializeField] private GameObject cellIndicator;
+    [SerializeField] private GameObject gridPlane;
+    [SerializeField] private Grid grid;
 
     private Vector3 _cursorDefaultSize = Vector3.zero;
-    private bool isBuilding = false;
+    private bool _objectPreview = false;
     private GameObject currentObject;
     private Road _road;
     private Vector3 _selectedGridPosition = Vector3.zero;
     private Building _currentBuilding;
     private bool canBuild = true;
+    private bool _active = false;
 
     public static PlacementSystem Instance { get; private set; }
 
@@ -46,9 +49,38 @@ public class PlacementSystem : MonoBehaviour
         }
     }
 
+    private void Start()
+    {
+        ToggleGrid(false);
+        GameManager.Instance.onChangeMode += GameManagerOnChangeMode;
+    }
+
+    private void OnDestroy()
+    {
+        GameManager.Instance.onChangeMode -= GameManagerOnChangeMode;
+    }
+
+    private void GameManagerOnChangeMode(object sender, GameManager.ModeEventArgs e)
+    {
+        CancelBuilding();
+        _active = e.newMode == GameManager.Mode.building;
+        ToggleGrid(_active);
+    }
+
+    private void ToggleGrid(bool toggle)
+    {
+        gridPlane.SetActive(toggle);
+        cellIndicator.SetActive(toggle);
+    }
+
     private async void Update()
     {
-        Vector3 mousePosition = inputManager.GetSelectedMapPosition();
+        if (!_active)
+        {
+            return;
+        }
+
+        Vector3 mousePosition = inputManager.GetSelectedMapPosition(out bool hits);
 
         _selectedGridPosition = currentObject && !isObjectSquare() && (currentObject.transform.eulerAngles.y == 90 || currentObject.transform.eulerAngles.y == 270)
             ? grid.CellToWorld(grid.WorldToCell(mousePosition)) + new Vector3(0.5f, 0, 0.5f)
@@ -70,14 +102,10 @@ public class PlacementSystem : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            Destroy(currentObject);
-            ResetCursorIndicator();
-            isBuilding = false;
-            canBuild = true;
-            currentObject = null;
+            CancelBuilding();
         }
 
-        if (isBuilding && currentObject != null)
+        if (_objectPreview && currentObject != null)
         {
             cellIndicator.transform.rotation = currentObject.transform.rotation;
             currentObject.transform.position = IsCursorDefaultSize()
@@ -106,6 +134,28 @@ public class PlacementSystem : MonoBehaviour
         }
     }
 
+    private void CancelBuilding()
+    {
+        Destroy(currentObject);
+        ResetCursorIndicator();
+        _objectPreview = false;
+        canBuild = true;
+        currentObject = null;
+    }
+
+    private void initObject()
+    {
+        currentObject = Instantiate(buildingPrefab, _selectedGridPosition, Quaternion.identity);
+        currentObject?.TryGetComponent(out _road);
+
+        if (currentObject.TryGetComponent(out Building building))
+        {
+            _currentBuilding = building;
+            building.Select();
+            UpdateCursorIndicator(building?.buildingSO);
+        }
+    }
+
     private async Task Build()
     {
         if (!canBuild)
@@ -113,19 +163,11 @@ public class PlacementSystem : MonoBehaviour
             return;
         }
 
-        isBuilding = !isBuilding;
+        _objectPreview = !_objectPreview;
 
-        if (isBuilding)
+        if (_objectPreview)
         {
-            currentObject = Instantiate(buildingPrefab, _selectedGridPosition, Quaternion.identity);
-            currentObject?.TryGetComponent(out _road);
-
-            if (currentObject.TryGetComponent(out Building building))
-            {
-                _currentBuilding = building;
-                building.Select();
-                UpdateCursorIndicator(building?.buildingSO);
-            }
+            initObject();
         }
         else
         {
@@ -147,10 +189,10 @@ public class PlacementSystem : MonoBehaviour
                 List<Road> roadsToRotate = new List<Road> { road };
                 roadsToRotate.AddRange(road.GetCollidingRoads(road.transform.position));
 
-                foreach (Road r in roadsToRotate)
+                foreach (Road roadToRotate in roadsToRotate)
                 {
-                    Road suitableRoad = r.GetSuitableRoad();
-                    GameObject newBuilding = ChangeBuilding(r.gameObject, suitableRoad.gameObject);
+                    Road suitableRoad = roadToRotate.GetSuitableRoad();
+                    GameObject newBuilding = ChangeBuilding(roadToRotate.gameObject, suitableRoad.gameObject);
                     Road newRoad = newBuilding.GetComponent<Road>();
                     await Task.Delay(TimeSpan.FromSeconds(0.025f));
 
@@ -164,12 +206,13 @@ public class PlacementSystem : MonoBehaviour
                         RotateBuilding(newBuilding);
                     }
                 }
-                Destroy(currentObject);
             }
 
-            ResetCursorIndicator();
             _currentBuilding = null;
             currentObject = null;
+            _objectPreview = true;
+            initObject();
+            ResetCursorIndicator();
         }
     }
 

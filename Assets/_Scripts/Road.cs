@@ -60,16 +60,13 @@ public class Road : MonoBehaviour
                 if ((isStraight && road.type == RoadType.Straight) || (!isStraight && road.type == RoadType.Corner))
                 {
                     float chance = Random.Range(0, 1f);
-                    Debug.Log($"C: [{chance}]");
                     return chance <= CHANCE_CROSSING_ROAD ? road.crossingVersion ?? road : road;
                 }
             }
             else if (road.nodes.Count == collidingRodes.Count)
             {
-                float chance = Random.Range(0, 1f);
                 return Random.Range(0, 1f) <= CHANCE_CROSSING_ROAD ? road.crossingVersion ?? road : road;
             }
-
         }
 
         return this;

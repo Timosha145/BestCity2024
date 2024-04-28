@@ -32,6 +32,26 @@ public class LabelManager : MonoBehaviour
     [SerializeField] private Image _industrialNeed;
     [SerializeField] private Image _jobNeed;
 
+    [Header("Toolbar")]
+    [SerializeField] private float _groupItemWidth;
+    [SerializeField] private GroupItem _groupItem;
+    [SerializeField] private RectTransform _residenceRect;
+    [SerializeField] private RectTransform _commercialRect;
+    [SerializeField] private RectTransform _industryRect;
+    [SerializeField] private RectTransform _otherRect;
+
+    private HorizontalLayoutGroup _residenceLayoutGroup;
+    private HorizontalLayoutGroup _commercialLayoutGroup;
+    private HorizontalLayoutGroup _industryLayoutGroup;
+    private HorizontalLayoutGroup _otherLayoutGroup;
+
+    private void Awake()
+    {
+        _residenceLayoutGroup = _residenceRect.GetComponent<HorizontalLayoutGroup>();
+        //_commercialLayoutGroup = _commercialRect.GetComponent<HorizontalLayoutGroup>();
+        //_industryLayoutGroup = _industryRect.GetComponent<HorizontalLayoutGroup>();
+        //_otherLayoutGroup = _otherRect.GetComponent<HorizontalLayoutGroup>();
+    }
 
     private void Start()
     {
@@ -39,6 +59,18 @@ public class LabelManager : MonoBehaviour
         _commercialBtn.onClick.AddListener(ChangeCommercial);
         _residentBtn.onClick.AddListener(ChangeResidence);
         _roadBtn.onClick.AddListener(ChangeRoad);
+
+        InitLayoutGroups();
+    }
+
+    private void InitLayoutGroups()
+    {
+        foreach (Residence residence in GameManager.Instance.residencePrefabs)
+        {
+            GroupItem groupItem = Instantiate(_groupItem, _residenceLayoutGroup.transform);
+            groupItem.Init(residence.sprite, residence.gameObject);
+            _residenceRect.sizeDelta = new Vector2(_residenceRect.sizeDelta.x + _groupItemWidth, _residenceRect.sizeDelta.y);
+        }
     }
 
     private void ChangeRoad()

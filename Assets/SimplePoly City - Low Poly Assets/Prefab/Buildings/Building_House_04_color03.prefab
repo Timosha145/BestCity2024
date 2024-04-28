@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 400000}
   - component: {fileID: 3300000}
   - component: {fileID: 2300000}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Building_House_04_color03
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -95,7 +95,7 @@ GameObject:
   - component: {fileID: 3003958027461959765}
   - component: {fileID: 1562325847567821242}
   - component: {fileID: 520069955054382949}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Selected
   m_TagString: Untagged
   m_Icon: {fileID: 0}

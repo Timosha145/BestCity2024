@@ -1,10 +1,15 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
 
+    [field: Header("Prefabs")]
+    [field: SerializeField] public List<Residence> residencePrefabs { get; private set; }
+    [field: SerializeField] public List<Road> roadPrefabs { get; private set; }
+    [field: Header("Game Settings")]
     [field: SerializeField] public int population { get; set; }
     [field: SerializeField] public int employed { get; private set; }
     [field: SerializeField] public float jobCount { get; set; }

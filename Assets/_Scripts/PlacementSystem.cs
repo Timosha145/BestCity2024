@@ -7,7 +7,6 @@ using UnityEngine.UIElements;
 
 public class PlacementSystem : MonoBehaviour
 {
-    [SerializeField] public List<Road> roadVariants;
     [SerializeField] private GameObject buildingPrefab;
     [SerializeField] private InputManager inputManager;
     [Header("Offset")]
@@ -25,11 +24,12 @@ public class PlacementSystem : MonoBehaviour
     [SerializeField] private Grid grid;
 
     private Vector3 _cursorDefaultSize = Vector3.zero;
-    private bool _objectPreview = false;
+    private Vector3 _selectedGridPosition = Vector3.zero;
+    private Quaternion _rotation = Quaternion.identity;
     private GameObject currentObject;
     private Road _road;
-    private Vector3 _selectedGridPosition = Vector3.zero;
     private Building _currentBuilding;
+    private bool _objectPreview = false;
     private bool canBuild = true;
     private bool _active = false;
 
@@ -129,7 +129,7 @@ public class PlacementSystem : MonoBehaviour
             if (_currentBuilding)
             {
                 _currentBuilding.Select();
-                UpdateCursorIndicator(_currentBuilding.buildingSO);
+                UpdateCursorIndicator(_currentBuilding);
             }
         }
     }
@@ -145,14 +145,14 @@ public class PlacementSystem : MonoBehaviour
 
     private void initObject()
     {
-        currentObject = Instantiate(buildingPrefab, _selectedGridPosition, Quaternion.identity);
+        currentObject = Instantiate(buildingPrefab, _selectedGridPosition, _rotation);
         currentObject?.TryGetComponent(out _road);
 
         if (currentObject.TryGetComponent(out Building building))
         {
             _currentBuilding = building;
             building.Select();
-            UpdateCursorIndicator(building?.buildingSO);
+            UpdateCursorIndicator(building);
         }
     }
 
@@ -218,7 +218,8 @@ public class PlacementSystem : MonoBehaviour
 
     private bool isObjectSquare()
     {
-        return _currentBuilding && _currentBuilding.buildingSO.widthX == _currentBuilding.buildingSO.lengthZ || _road;
+        Debug.Log("SQUARE: " + (_currentBuilding && _currentBuilding.widthX == _currentBuilding.lengthZ || _road));
+        return _currentBuilding && _currentBuilding.widthX == _currentBuilding.lengthZ || _road;
     }
 
     private bool isBuildingColliding()
@@ -265,6 +266,7 @@ public class PlacementSystem : MonoBehaviour
     private void RotateBuilding(GameObject building)
     {
         building.transform.Rotate(0f, 90f, 0f);
+        _rotation = building.transform.rotation;
     }
 
     private bool IsCursorDefaultSize()
@@ -272,9 +274,9 @@ public class PlacementSystem : MonoBehaviour
         return cellIndicator.transform.localScale == _cursorDefaultSize;
     }
 
-    public void UpdateCursorIndicator(BuildingSO buildingSO)
+    public void UpdateCursorIndicator(Building building)
     {
-        Vector3 cursorSize = new Vector3(buildingSO.widthX, 1f, buildingSO.lengthZ);
+        Vector3 cursorSize = new Vector3(building.widthX, 1f, building.lengthZ);
         cellIndicator.transform.localScale = cursorSize;
 
         cellIndicator.transform.position = _selectedGridPosition + _offset;

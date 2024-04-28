@@ -2,7 +2,9 @@ using UnityEngine;
 
 public class Residence : Building
 {
-    [field: SerializeField] public ResidenceSO residenceSO { get; private set; }
+    [field: Header("Residence Settings")]
+    [field: SerializeField] public int population { get; private set; }
+    [field: SerializeField] public float residentsCountUpdateRate { get; private set; } = 15f;
 
     public int currentPopulation { get; private set; }
 
@@ -11,7 +13,6 @@ public class Residence : Building
 
     private void Awake()
     {
-        initBuildingSO(residenceSO);
         AssignRandomPeopleMoveInCount();
     }
 
@@ -26,17 +27,17 @@ public class Residence : Building
 
         _timer += Time.deltaTime;
 
-        if (_timer > residenceSO.timeToMoveIn && currentPopulation < residenceSO.population)
+        if (_timer > residentsCountUpdateRate && currentPopulation < population)
         {   
             _timer = 0;
             AssignRandomPeopleMoveInCount();
-            currentPopulation = Mathf.Clamp(currentPopulation + _peopleMoveInCount, 0, residenceSO.population);
+            currentPopulation = Mathf.Clamp(currentPopulation + _peopleMoveInCount, 0, population);
             GameManager.Instance.population += _peopleMoveInCount;
         }
     }
 
     private void AssignRandomPeopleMoveInCount()
     {
-        _peopleMoveInCount = Random.Range(0, residenceSO.population + 1 - currentPopulation);
+        _peopleMoveInCount = Random.Range(0, population + 1 - currentPopulation);
     }
 }

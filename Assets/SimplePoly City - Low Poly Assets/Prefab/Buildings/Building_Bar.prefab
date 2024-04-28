@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2300000}
   - component: {fileID: 9500000}
   - component: {fileID: 1982655914886718273}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Building_Bar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -119,11 +119,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f99797d40a41c7f47889c9c419f24ac2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buildingSO: {fileID: 0}
+  <cost>k__BackingField: 0
+  <waitUntilDestroying>k__BackingField: 60
+  widthX: 0
+  lengthZ: 0
+  <sprite>k__BackingField: {fileID: 0}
   _selectVisual: {fileID: 4688870198463135282}
+  _UIVisual: {fileID: 0}
+  _timerLbl: {fileID: 0}
   isBuilt: 0
-  <commercialSO>k__BackingField: {fileID: 11400000, guid: 688fd8549c9d88a4b985b3932dea3d93,
-    type: 2}
+  <workerNeededAmount>k__BackingField: 0
+  <workerAmountThreshold>k__BackingField: 0
+  <materialsNeededAmount>k__BackingField: 0
+  <materialsAmountThreshold>k__BackingField: 0
+  <productionRate>k__BackingField: 0
+  <productionAmount>k__BackingField: 0
 --- !u!1 &4688870198463135282
 GameObject:
   m_ObjectHideFlags: 0
@@ -137,7 +147,7 @@ GameObject:
   - component: {fileID: 746068842749608811}
   - component: {fileID: 7513742477720993709}
   - component: {fileID: 6075711928082213549}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Selected
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -242,8 +252,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f99797d40a41c7f47889c9c419f24ac2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buildingSO: {fileID: 0}
+  <cost>k__BackingField: 0
+  <waitUntilDestroying>k__BackingField: 60
+  widthX: 0
+  lengthZ: 0
+  <sprite>k__BackingField: {fileID: 0}
   _selectVisual: {fileID: 0}
+  _UIVisual: {fileID: 0}
+  _timerLbl: {fileID: 0}
   isBuilt: 0
-  <commercialSO>k__BackingField: {fileID: 11400000, guid: 688fd8549c9d88a4b985b3932dea3d93,
-    type: 2}
+  <workerNeededAmount>k__BackingField: 0
+  <workerAmountThreshold>k__BackingField: 0
+  <materialsNeededAmount>k__BackingField: 0
+  <materialsAmountThreshold>k__BackingField: 0
+  <productionRate>k__BackingField: 0
+  <productionAmount>k__BackingField: 0

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 400000}
   - component: {fileID: 3300000}
   - component: {fileID: 2300000}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Building_Fruits  Shop
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -95,7 +95,7 @@ GameObject:
   - component: {fileID: 171063552084520288}
   - component: {fileID: 3812031099290741131}
   - component: {fileID: 449321254621121094}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Selected
   m_TagString: Untagged
   m_Icon: {fileID: 0}

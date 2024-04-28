@@ -51,7 +51,7 @@ public class Road : MonoBehaviour
     {
         List<Road> collidingRodes = GetCollidingRoads(transform.position);
 
-        foreach (Road road in PlacementSystem.Instance.roadVariants)
+        foreach (Road road in GameManager.Instance.roadPrefabs)
         {
             if (collidingRodes.Count == 2)
             {

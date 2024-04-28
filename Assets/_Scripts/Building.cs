@@ -1,14 +1,21 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Building : MonoBehaviour
 {
+    [field: Header("Main Settings")]
+    [field: SerializeField] public int cost { get; private set; }
+    [field: SerializeField] public float waitUntilDestroying { get; private set; } = 60f;
+    [field: SerializeField] public int widthX;
+    [field: SerializeField] public int lengthZ;
+    [field: Header("Prefab Settings")]
+    [field: SerializeField] public Sprite sprite { get; private set; }
     [SerializeField] private GameObject _selectVisual;
     [SerializeField] private GameObject _UIVisual;
     [SerializeField] private TextMeshProUGUI _timerLbl;
 
-    public BuildingSO buildingSO { get; private set; }
     protected float timerUntilDestruction = 0;
     protected bool shouldBeDestroyed = false;
     private Renderer _renderer;
@@ -22,27 +29,22 @@ public class Building : MonoBehaviour
 
     protected virtual void Update()
     {
-        _timerLbl.text = $"{Mathf.Ceil(buildingSO.waitUntilDestroying - timerUntilDestruction)}s";
+        _timerLbl.text = $"{Mathf.Ceil(waitUntilDestroying - timerUntilDestruction)}s";
 
-        if (timerUntilDestruction >= buildingSO.waitUntilDestroying && shouldBeDestroyed)
+        if (timerUntilDestruction >= waitUntilDestroying && shouldBeDestroyed)
         {
             Destroy(gameObject);
         }
     }
 
-    protected void initBuildingSO(BuildingSO buildingSO)
-    {
-        this.buildingSO = buildingSO;
-    }
-
     public bool CanBuild()
     {
-        return buildingSO.cost <= GameManager.Instance.money;
+        return cost <= GameManager.Instance.money;
     }
 
     public void Pay()
     {
-        GameManager.Instance.money -= buildingSO.cost;
+        GameManager.Instance.money -= cost;
         OnBuild();
     }
 

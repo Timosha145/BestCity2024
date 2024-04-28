@@ -99,13 +99,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 206bf35f1dc8a1a4eaa6796dc88731e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <cost>k__BackingField: 200
+  <waitUntilDestroying>k__BackingField: 60
+  widthX: 2
+  lengthZ: 3
+  <sprite>k__BackingField: {fileID: 0}
   _selectVisual: {fileID: 2074520764759563444}
   _UIVisual: {fileID: 6511485886277412186}
   _timerLbl: {fileID: 8648849080482588221}
-  _buildingSO: {fileID: 0}
   isBuilt: 0
-  <industrialSO>k__BackingField: {fileID: 11400000, guid: 55d46090a8993fa49844514953010662,
-    type: 2}
+  <workerNeededAmount>k__BackingField: 30
+  <workerAmountThreshold>k__BackingField: 0.1
+  <productionRate>k__BackingField: 2
+  <productionAmount>k__BackingField: 10
 --- !u!65 &2301386168960406313
 BoxCollider:
   m_ObjectHideFlags: 0

@@ -99,13 +99,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19b2d3825cb83aa42b16fb3832ae2d4f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <cost>k__BackingField: 200
+  <waitUntilDestroying>k__BackingField: 60
+  widthX: 2
+  lengthZ: 1
+  <sprite>k__BackingField: {fileID: 21300000, guid: 3ce9a0abcd243ee41bb8c8766c7bd340,
+    type: 3}
   _selectVisual: {fileID: 1574194308017374665}
   _UIVisual: {fileID: 8532192265069641545}
   _timerLbl: {fileID: 2803016963669823892}
-  _buildingSO: {fileID: 0}
   isBuilt: 0
-  <residenceSO>k__BackingField: {fileID: 11400000, guid: ec37eb1221ff0e1479771c4f92d7da9e,
-    type: 2}
+  <population>k__BackingField: 100
+  <residentsCountUpdateRate>k__BackingField: 0
 --- !u!65 &4428246519124503419
 BoxCollider:
   m_ObjectHideFlags: 0

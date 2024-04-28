@@ -2,14 +2,18 @@ using UnityEngine;
 
 public class Commercial : Building
 {
-    [field: SerializeField] public CommercialSO commercialSO { get; private set; }
+    [field: Header("Commercial Settings")]
+    [field: SerializeField] public int workerNeededAmount { get; private set; }
+    [field: Range(0, 1)]
+    [field: SerializeField] public float workerAmountThreshold { get; private set; }
+    [field: SerializeField] public int materialsNeededAmount { get; private set; }
+    [field: Range(0, 1)]
+    [field: SerializeField] public float materialsAmountThreshold { get; private set; }
+    [field: Space]
+    [field: SerializeField] public float productionRate { get; private set; }
+    [field: SerializeField] public int productionAmount { get; private set; }
     private float _timer = 0;
     private int _workerCount = 0;
-
-    private void Awake()
-    {
-        initBuildingSO(commercialSO);
-    }
 
     protected override void Update()
     {
@@ -30,17 +34,17 @@ public class Commercial : Building
         timerUntilDestruction += shouldBeDestroyed ? Time.deltaTime : 0;
 
 
-        if (_timer > commercialSO.productionRate)
+        if (_timer > productionRate)
         {   
             _timer = 0;
 
-            if (GameManager.Instance.materials >= commercialSO.materialsNeededAmount && IsEnoughWorkers())
+            if (GameManager.Instance.materials >= materialsNeededAmount && IsEnoughWorkers())
             {
                 HideUI();
                 shouldBeDestroyed = false;
                 timerUntilDestruction = 0;
-                GameManager.Instance.products += commercialSO.productionAmount;
-                GameManager.Instance.materials -= commercialSO.materialsNeededAmount;
+                GameManager.Instance.products += productionAmount;
+                GameManager.Instance.materials -= materialsNeededAmount;
             }
             else
             {
@@ -59,15 +63,15 @@ public class Commercial : Building
     private bool IsEnoughWorkers(bool maxWorkers = false)
     {
         int neededWorkerCount = maxWorkers
-            ? (int)Mathf.Ceil(commercialSO.workerNeededAmount + commercialSO.workerNeededAmount * commercialSO.workerAmountThreshold)
-            : (int)Mathf.Ceil(commercialSO.workerNeededAmount - commercialSO.workerNeededAmount * commercialSO.workerAmountThreshold);
+            ? (int)Mathf.Ceil(workerNeededAmount + workerNeededAmount * workerAmountThreshold)
+            : (int)Mathf.Ceil(workerNeededAmount - workerNeededAmount * workerAmountThreshold);
 
         return _workerCount >= neededWorkerCount;
     }
 
     private int getMaximumJobCount()
     {
-        return (int)Mathf.Ceil(commercialSO.workerNeededAmount + commercialSO.workerNeededAmount * commercialSO.workerAmountThreshold);
+        return (int)Mathf.Ceil(workerNeededAmount + workerNeededAmount * workerAmountThreshold);
     }
 
     protected override void OnBuild()

@@ -14,6 +14,7 @@ public class Road : MonoBehaviour
     [field: SerializeField] public List<RoadNode> nodes { get; private set; } = new List<RoadNode>();
     [field: SerializeField] public RoadType type { get; private set; } = RoadType.Other;
     [field: SerializeField] public Road crossingVersion { get; private set; }
+    [field: SerializeField] public float cost { get; private set; } = 15f;
 
     private Renderer _renderer;
     public List<Road> collidingRoads { get; private set; } = new List<Road>();
@@ -29,6 +30,16 @@ public class Road : MonoBehaviour
     private void Start()
     {
         _renderer = GetComponent<Renderer>();
+    }
+
+    public void Pay()
+    {
+        GameManager.Instance.money -= cost;
+    }
+
+    public bool CanBuild()
+    {
+        return cost <= GameManager.Instance.money;
     }
 
     public List<Road> GetCollidingRoads(Vector3 position)

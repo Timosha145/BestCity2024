@@ -11,13 +11,14 @@ public class GroupItem : MonoBehaviour
     {
         button.onClick.AddListener(() =>
         {
+            PlacementSystem.Instance.CancelBuilding();
             PlacementSystem.Instance.ChangePrefab(_buildingPrefab);
         });
     }
 
     public void Init(Sprite sprite, GameObject buildingPrefab)
     {
-        button.image.sprite = sprite;
+        button.image.sprite = sprite ?? button.image.sprite;
         _buildingPrefab = buildingPrefab;
     }
 }

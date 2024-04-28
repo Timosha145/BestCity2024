@@ -13,16 +13,6 @@ public class LabelManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _materialsLabel;
     [SerializeField] private TextMeshProUGUI _productsLabel;
 
-    [SerializeField] private Button _industrialBtn;
-    [SerializeField] private Button _commercialBtn;
-    [SerializeField] private Button _residentBtn;
-    [SerializeField] private Button _roadBtn;
-
-    [SerializeField] private GameObject _industrial;
-    [SerializeField] private GameObject _commercial;
-    [SerializeField] private GameObject _residence;
-    [SerializeField] private GameObject _road;
-
     [Header("Employed Pie Chart")]
     [SerializeField] private Image _pieChartEmployed;
 
@@ -35,10 +25,20 @@ public class LabelManager : MonoBehaviour
     [Header("Toolbar")]
     [SerializeField] private float _groupItemWidth;
     [SerializeField] private GroupItem _groupItem;
+    [SerializeField] private GameObject _residenceScrollView;
+    [SerializeField] private GameObject _commercialScrollView;
+    [SerializeField] private GameObject _industryScrollView;
+    [SerializeField] private GameObject _otherScrollView;
     [SerializeField] private RectTransform _residenceRect;
     [SerializeField] private RectTransform _commercialRect;
     [SerializeField] private RectTransform _industryRect;
     [SerializeField] private RectTransform _otherRect;
+    [Space]
+    [SerializeField] private Button _residenceSelectBtn;
+    [SerializeField] private Button _commercialSelectBtn;
+    [SerializeField] private Button _industrySelectBtn;
+    [SerializeField] private Button _otherSelectBtn;
+    [SerializeField] private Button _roadSelectBtn;
 
     private HorizontalLayoutGroup _residenceLayoutGroup;
     private HorizontalLayoutGroup _commercialLayoutGroup;
@@ -48,49 +48,56 @@ public class LabelManager : MonoBehaviour
     private void Awake()
     {
         _residenceLayoutGroup = _residenceRect.GetComponent<HorizontalLayoutGroup>();
-        //_commercialLayoutGroup = _commercialRect.GetComponent<HorizontalLayoutGroup>();
-        //_industryLayoutGroup = _industryRect.GetComponent<HorizontalLayoutGroup>();
+        _commercialLayoutGroup = _commercialRect.GetComponent<HorizontalLayoutGroup>();
+        _industryLayoutGroup = _industryRect.GetComponent<HorizontalLayoutGroup>();
         //_otherLayoutGroup = _otherRect.GetComponent<HorizontalLayoutGroup>();
     }
 
     private void Start()
     {
-        _industrialBtn.onClick.AddListener(ChangeIndustrial);
-        _commercialBtn.onClick.AddListener(ChangeCommercial);
-        _residentBtn.onClick.AddListener(ChangeResidence);
-        _roadBtn.onClick.AddListener(ChangeRoad);
-
         InitLayoutGroups();
-    }
+        DisableAllScrollViews();
 
-    private void InitLayoutGroups()
-    {
-        foreach (Residence residence in GameManager.Instance.residencePrefabs)
+        _residenceNeed.fillAmount = 1f;
+        _commercialNeed.fillAmount = 0f;
+        _industrialNeed.fillAmount = 0f;
+        _jobNeed.fillAmount = 0f;
+
+        _residenceSelectBtn.onClick.AddListener(() =>
         {
-            GroupItem groupItem = Instantiate(_groupItem, _residenceLayoutGroup.transform);
-            groupItem.Init(residence.sprite, residence.gameObject);
-            _residenceRect.sizeDelta = new Vector2(_residenceRect.sizeDelta.x + _groupItemWidth, _residenceRect.sizeDelta.y);
-        }
-    }
+            GameManager.Instance.ChangeMode(GameManager.Mode.building);
+            DisableAllScrollViews();
 
-    private void ChangeRoad()
-    {
-        PlacementSystem.Instance.ChangePrefab(_road);
-    }
+            _residenceScrollView.SetActive(true);
+            PlacementSystem.Instance.CancelBuilding();
+        });
 
-    private void ChangeIndustrial()
-    {
-        PlacementSystem.Instance.ChangePrefab(_industrial);
-    }
+        _commercialSelectBtn.onClick.AddListener(() =>
+        {
+            GameManager.Instance.ChangeMode(GameManager.Mode.building);
+            DisableAllScrollViews();
 
-    private void ChangeCommercial()
-    {
-        PlacementSystem.Instance.ChangePrefab(_commercial);
-    }
+            _commercialScrollView.SetActive(true);
+            PlacementSystem.Instance.CancelBuilding();
+        });
 
-    private void ChangeResidence()
-    {
-        PlacementSystem.Instance.ChangePrefab(_residence);
+        _industrySelectBtn.onClick.AddListener(() =>
+        {
+            GameManager.Instance.ChangeMode(GameManager.Mode.building);
+            DisableAllScrollViews();
+
+            _industryScrollView.SetActive(true);
+            PlacementSystem.Instance.CancelBuilding();
+        });
+
+        _roadSelectBtn.onClick.AddListener(() =>
+        {
+            GameManager.Instance.ChangeMode(GameManager.Mode.building);
+            DisableAllScrollViews();
+
+            PlacementSystem.Instance.CancelBuilding();
+            PlacementSystem.Instance.ChangePrefab(GameManager.Instance.roadPreview.gameObject);
+        });
     }
 
     private void Update()
@@ -101,6 +108,44 @@ public class LabelManager : MonoBehaviour
         _productsLabel.text = GameManager.Instance.products.ToString();
         UpdateNeedCharts();
         UpdateEmployedPieChart();
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            PlacementSystem.Instance.CancelBuilding();
+            DisableAllScrollViews();
+            GameManager.Instance.ChangeMode(GameManager.Mode.idle);
+        }
+    }
+
+    private void DisableAllScrollViews()
+    {
+        _residenceScrollView.SetActive(false);
+        _commercialScrollView.SetActive(false);
+        _industryScrollView.SetActive(false);
+    }
+
+    private void InitLayoutGroups()
+    {
+        foreach (Residence residence in GameManager.Instance.residencePrefabs)
+        {
+            GroupItem groupItem = Instantiate(_groupItem, _residenceLayoutGroup.transform);
+            groupItem.Init(residence.sprite, residence.gameObject);
+            _residenceRect.sizeDelta = new Vector2(_residenceRect.sizeDelta.x + _groupItemWidth, _residenceRect.sizeDelta.y);
+        }
+
+        foreach (Commercial commercial in GameManager.Instance.commercialPrefabs)
+        {
+            GroupItem groupItem = Instantiate(_groupItem, _commercialLayoutGroup.transform);
+            groupItem.Init(commercial.sprite, commercial.gameObject);
+            _commercialRect.sizeDelta = new Vector2(_commercialRect.sizeDelta.x + _groupItemWidth, _commercialRect.sizeDelta.y);
+        }
+
+        foreach (Industrial industrial in GameManager.Instance.industryPrefabs)
+        {
+            GroupItem groupItem = Instantiate(_groupItem, _industryLayoutGroup.transform);
+            groupItem.Init(industrial.sprite, industrial.gameObject);
+            _industryRect.sizeDelta = new Vector2(_industryRect.sizeDelta.x + _groupItemWidth, _industryRect.sizeDelta.y);
+        }
     }
 
     private void UpdateNeedCharts()

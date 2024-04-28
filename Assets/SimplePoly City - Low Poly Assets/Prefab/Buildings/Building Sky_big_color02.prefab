@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3300000}
   - component: {fileID: 2300000}
   - component: {fileID: 5792581176712008900}
+  - component: {fileID: -6495025617880027846}
   m_Layer: 3
   m_Name: Building Sky_big_color02
   m_TagString: Untagged
@@ -101,7 +102,7 @@ MonoBehaviour:
   <cost>k__BackingField: 175
   <waitUntilDestroying>k__BackingField: 60
   widthX: 2
-  lengthZ: 1
+  lengthZ: 2
   <sprite>k__BackingField: {fileID: 21300000, guid: 52c711ba089c0ba45a95585bbf4823e9,
     type: 3}
   _selectVisual: {fileID: 2543186457419074281}
@@ -110,6 +111,27 @@ MonoBehaviour:
   isBuilt: 0
   <population>k__BackingField: 75
   <residentsCountUpdateRate>k__BackingField: 20
+--- !u!65 &-6495025617880027846
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100000}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 13.659738, y: 24.802341, z: 12.296447}
+  m_Center: {x: -0.0000023841856, y: 12.401167, z: 0.12447905}
 --- !u!1 &2543186457419074281
 GameObject:
   m_ObjectHideFlags: 0

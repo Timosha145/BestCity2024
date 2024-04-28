@@ -103,7 +103,8 @@ MonoBehaviour:
   <waitUntilDestroying>k__BackingField: 60
   widthX: 2
   lengthZ: 3
-  <sprite>k__BackingField: {fileID: 0}
+  <sprite>k__BackingField: {fileID: 21300000, guid: 5d4d8e931f3e5ff41b07218034a4d02d,
+    type: 3}
   _selectVisual: {fileID: 2074520764759563444}
   _UIVisual: {fileID: 6511485886277412186}
   _timerLbl: {fileID: 8648849080482588221}

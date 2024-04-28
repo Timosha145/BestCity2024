@@ -24,13 +24,14 @@ public class PlacementSystem : MonoBehaviour
     [SerializeField] private Grid grid;
 
     private Vector3 _cursorDefaultSize = Vector3.zero;
+    public GameObject _currentObject;
     private Vector3 _selectedGridPosition = Vector3.zero;
     private Quaternion _rotation = Quaternion.identity;
-    private GameObject currentObject;
     private Road _road;
     private Building _currentBuilding;
     private bool _objectPreview = false;
     private bool canBuild = true;
+    private bool canPay = true;
     private bool _active = false;
 
     public static PlacementSystem Instance { get; private set; }
@@ -82,46 +83,54 @@ public class PlacementSystem : MonoBehaviour
 
         Vector3 mousePosition = inputManager.GetSelectedMapPosition(out bool hits);
 
-        _selectedGridPosition = currentObject && !isObjectSquare() && (currentObject.transform.eulerAngles.y == 90 || currentObject.transform.eulerAngles.y == 270)
-            ? grid.CellToWorld(grid.WorldToCell(mousePosition)) + new Vector3(0.5f, 0, 0.5f)
-            : grid.CellToWorld(grid.WorldToCell(mousePosition));
+        if (isObject2x2())
+        {
+            _selectedGridPosition = grid.CellToWorld(grid.WorldToCell(mousePosition)) + new Vector3(0f, 0f, 0.5f);
+        }
+        else
+        {
+            _selectedGridPosition = _currentObject && !isObjectSquare() && (_currentObject.transform.eulerAngles.y == 90 || _currentObject.transform.eulerAngles.y == 270)
+                ? grid.CellToWorld(grid.WorldToCell(mousePosition)) + new Vector3(0.5f, 0f, 0.5f)
+                : grid.CellToWorld(grid.WorldToCell(mousePosition));
+        }
 
         cellIndicator.transform.position = IsCursorDefaultSize()
                 ? _selectedGridPosition + _offset + _cursorDefaultOffset
                 : _selectedGridPosition + _offset;
 
-        if (Input.GetKeyDown(KeyCode.B))
+        if (Input.GetKeyDown(KeyCode.Mouse0) && hits)
         {
             await Build();
         }
 
-        if (Input.GetKeyDown(KeyCode.R) && currentObject)
+        if (Input.GetKeyDown(KeyCode.R) && _currentObject)
         {
-            RotateBuilding(currentObject);
+            RotateBuilding(_currentObject);
         }
 
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Mouse1))
         {
             CancelBuilding();
         }
 
-        if (_objectPreview && currentObject != null)
+        if (_objectPreview && _currentObject != null)
         {
-            cellIndicator.transform.rotation = currentObject.transform.rotation;
-            currentObject.transform.position = IsCursorDefaultSize()
+            cellIndicator.transform.rotation = _currentObject.transform.rotation;
+            _currentObject.transform.position = IsCursorDefaultSize()
                 ? _selectedGridPosition + _offset + _cursorDefaultOffset
                 : _selectedGridPosition + _offset;
 
             canBuild = !isBuildingColliding() && (_road || isCollidingWithRoad());
+            canPay = (_currentBuilding && _currentBuilding.CanBuild()) || (_road && _road.CanBuild());
 
-            if (canBuild)
+            if (canBuild && canPay)
             {
                 _currentBuilding?.ChangeSelectMaterial(_selectMaterial);
                 _road?.ChangeSelectMaterial(_selectMaterial);
             }
             else
             {
-                currentObject.transform.position = currentObject.transform.position + _extraOffset;
+                _currentObject.transform.position = _currentObject.transform.position + _extraOffset;
                 _currentBuilding?.ChangeSelectMaterial(_selectDangerMaterial);
                 _road?.ChangeSelectMaterial(_selectDangerMaterial);
             }
@@ -134,21 +143,24 @@ public class PlacementSystem : MonoBehaviour
         }
     }
 
-    private void CancelBuilding()
+    public void CancelBuilding()
     {
-        Destroy(currentObject);
-        ResetCursorIndicator();
-        _objectPreview = false;
-        canBuild = true;
-        currentObject = null;
+        if (_currentObject)
+        {
+            Destroy(_currentObject);
+            ResetCursorIndicator();
+            _objectPreview = false;
+            canBuild = true;
+            _currentObject = null;
+        }
     }
 
     private void initObject()
     {
-        currentObject = Instantiate(buildingPrefab, _selectedGridPosition, _rotation);
-        currentObject?.TryGetComponent(out _road);
+        _currentObject = Instantiate(buildingPrefab, _selectedGridPosition, _rotation);
+        _currentObject?.TryGetComponent(out _road);
 
-        if (currentObject.TryGetComponent(out Building building))
+        if (_currentObject.TryGetComponent(out Building building))
         {
             _currentBuilding = building;
             building.Select();
@@ -171,21 +183,19 @@ public class PlacementSystem : MonoBehaviour
         }
         else
         {
-            if (_currentBuilding)
+            bool success = false;
+
+            if (_currentBuilding && _currentBuilding.CanBuild())
             {
-                if (_currentBuilding.CanBuild())
-                {
-                    _currentBuilding.isBuilt = true;
-                    _currentBuilding.Pay();
-                    _currentBuilding.Unselect();
-                }
-                else
-                {
-                    Destroy(currentObject);
-                }
+                success = true;
+                _currentBuilding.isBuilt = true;
+                _currentBuilding.Pay();
+                _currentBuilding.Unselect();
             }
-            else if (currentObject.TryGetComponent(out Road road))
+            else if (_currentObject.TryGetComponent(out Road road) && road.CanBuild())
             {
+                success = true;
+                road.Pay();
                 List<Road> roadsToRotate = new List<Road> { road };
                 roadsToRotate.AddRange(road.GetCollidingRoads(road.transform.position));
 
@@ -208,23 +218,35 @@ public class PlacementSystem : MonoBehaviour
                 }
             }
 
-            _currentBuilding = null;
-            currentObject = null;
-            _objectPreview = true;
-            initObject();
-            ResetCursorIndicator();
+            if (success)
+            {
+                _currentBuilding = null;
+                _currentObject = null;
+                _objectPreview = true;
+                initObject();
+                ResetCursorIndicator();
+            } 
+            else
+            {
+                _road = null;
+                CancelBuilding();
+            }
         }
     }
 
     private bool isObjectSquare()
     {
-        Debug.Log("SQUARE: " + (_currentBuilding && _currentBuilding.widthX == _currentBuilding.lengthZ || _road));
         return _currentBuilding && _currentBuilding.widthX == _currentBuilding.lengthZ || _road;
+    }
+
+    private bool isObject2x2()
+    {
+        return _currentBuilding && _currentBuilding.widthX == 2 && _currentBuilding.widthX == _currentBuilding.lengthZ;
     }
 
     private bool isBuildingColliding()
     {
-        if (!currentObject)
+        if (!_currentObject)
         {
             return false;
         }
@@ -232,7 +254,7 @@ public class PlacementSystem : MonoBehaviour
         Collider[] colliders = Physics.OverlapBox(cellIndicator.transform.position, cellIndicator.transform.localScale * 0.4f,
             cellIndicator.transform.rotation, _buildingLayer);
 
-        if (colliders.Length == 1 && colliders[0].transform == currentObject.transform)
+        if (colliders.Length == 1 && colliders[0].transform == _currentObject.transform)
         {
             return false;
         }

@@ -8,7 +8,11 @@ public class GameManager : MonoBehaviour
 
     [field: Header("Prefabs")]
     [field: SerializeField] public List<Residence> residencePrefabs { get; private set; }
+    [field: SerializeField] public List<Industrial> industryPrefabs { get; private set; }
+    [field: SerializeField] public List<Commercial> commercialPrefabs { get; private set; }
+    [field: SerializeField] public List<Building> otherPrefabs { get; private set; }
     [field: SerializeField] public List<Road> roadPrefabs { get; private set; }
+    [field: SerializeField] public Road roadPreview { get; private set; }
     [field: Header("Game Settings")]
     [field: SerializeField] public int population { get; set; }
     [field: SerializeField] public int employed { get; private set; }
@@ -49,15 +53,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            Mode newMode = currentMode == Mode.building ? Mode.idle : Mode.building;
-            changeMode(newMode);
-        }
-    }
-
     public int Employ(int people)
     {
         int employedSuccess = Mathf.Clamp(people, 0, population - employed);
@@ -71,7 +66,7 @@ public class GameManager : MonoBehaviour
         employed -= people;
     }
 
-    public void changeMode(Mode mode)
+    public void ChangeMode(Mode mode)
     {
         currentMode = mode;
         onChangeMode?.Invoke(null, new ModeEventArgs(mode));

@@ -98,7 +98,7 @@ public class PlacementSystem : MonoBehaviour
                 ? _selectedGridPosition + _offset + _cursorDefaultOffset
                 : _selectedGridPosition + _offset;
 
-        if (Input.GetKeyDown(KeyCode.Mouse0) && hits)
+        if (Input.GetKeyDown(KeyCode.Mouse0) && hits && !inputManager.HitsUI())
         {
             await Build();
         }
@@ -155,8 +155,10 @@ public class PlacementSystem : MonoBehaviour
         }
     }
 
-    private void initObject()
+    public void InitObject()
     {
+        _objectPreview = true;
+
         _currentObject = Instantiate(buildingPrefab, _selectedGridPosition, _rotation);
         _currentObject?.TryGetComponent(out _road);
 
@@ -175,11 +177,9 @@ public class PlacementSystem : MonoBehaviour
             return;
         }
 
-        _objectPreview = !_objectPreview;
-
-        if (_objectPreview)
+        if (!_objectPreview)
         {
-            initObject();
+            InitObject();
         }
         else
         {
@@ -223,7 +223,7 @@ public class PlacementSystem : MonoBehaviour
                 _currentBuilding = null;
                 _currentObject = null;
                 _objectPreview = true;
-                initObject();
+                InitObject();
                 ResetCursorIndicator();
             } 
             else

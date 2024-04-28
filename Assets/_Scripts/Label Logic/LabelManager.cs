@@ -97,6 +97,7 @@ public class LabelManager : MonoBehaviour
 
             PlacementSystem.Instance.CancelBuilding();
             PlacementSystem.Instance.ChangePrefab(GameManager.Instance.roadPreview.gameObject);
+            PlacementSystem.Instance.InitObject();
         });
     }
 

@@ -40,4 +40,9 @@ public class InputManager : MonoBehaviour
 
         return lastPosition;
     }
+
+    public bool HitsUI()
+    {
+        return EventSystem.current.IsPointerOverGameObject();
+    }
 }

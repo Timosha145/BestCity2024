@@ -13,6 +13,7 @@ public class GroupItem : MonoBehaviour
         {
             PlacementSystem.Instance.CancelBuilding();
             PlacementSystem.Instance.ChangePrefab(_buildingPrefab);
+            PlacementSystem.Instance.InitObject();
         });
     }
 

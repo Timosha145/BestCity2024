@@ -109,6 +109,7 @@ MonoBehaviour:
   _UIVisual: {fileID: 7844991937128545855}
   _timerLbl: {fileID: 3740629876054606882}
   isBuilt: 0
+  <salary>k__BackingField: 15
   <workerNeededAmount>k__BackingField: 20
   <workerAmountThreshold>k__BackingField: 0.1
   <materialsNeededAmount>k__BackingField: 10

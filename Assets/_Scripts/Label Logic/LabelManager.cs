@@ -58,10 +58,11 @@ public class LabelManager : MonoBehaviour
         InitLayoutGroups();
         DisableAllScrollViews();
 
-        _residenceNeed.fillAmount = 1f;
+        _residenceNeed.fillAmount = 0f;
         _commercialNeed.fillAmount = 0f;
         _industrialNeed.fillAmount = 0f;
         _jobNeed.fillAmount = 0f;
+        _pieChartEmployed.fillAmount = 1f;
 
         _residenceSelectBtn.onClick.AddListener(() =>
         {
@@ -103,9 +104,12 @@ public class LabelManager : MonoBehaviour
 
     private void Update()
     {
-        _labelMoney.text = GameManager.Instance.money.ToString("N0");
+        _labelMoney.text = GameManager.Instance.money > 999999999f
+            ? "999,999,999+"
+            : GameManager.Instance.money.ToString("N0");
+
         _labelPopulation.text = GameManager.Instance.population.ToString();
-        _materialsLabel.text = GameManager.Instance.materials.ToString();
+        _materialsLabel.text = GameManager.Instance.neededProductsPerDay.ToString();
         _productsLabel.text = GameManager.Instance.products.ToString();
         UpdateNeedCharts();
         UpdateEmployedPieChart();
@@ -151,6 +155,7 @@ public class LabelManager : MonoBehaviour
 
     private void UpdateNeedCharts()
     {
+        // Jobs
         if (GameManager.Instance.population > 0)
         {
             float jobs = GameManager.Instance.jobCount > 0
@@ -161,7 +166,12 @@ public class LabelManager : MonoBehaviour
 
             _jobNeed.fillAmount = Mathf.MoveTowards(_jobNeed.fillAmount, fill, _lerp * Time.deltaTime);
         }
+        else
+        {
+            _jobNeed.fillAmount = Mathf.MoveTowards(_jobNeed.fillAmount, 0, _lerp * Time.deltaTime);
+        }
 
+        // Residence
         if (GameManager.Instance.jobCount > 0)
         {
             float workers = GameManager.Instance.population > 0
@@ -171,6 +181,49 @@ public class LabelManager : MonoBehaviour
             float fill = workers > 1f ? 0f : workers;
 
             _residenceNeed.fillAmount = Mathf.MoveTowards(_residenceNeed.fillAmount, fill, _lerp * Time.deltaTime);
+        }
+        else
+        {
+            _residenceNeed.fillAmount = Mathf.MoveTowards(_residenceNeed.fillAmount, 0, _lerp * Time.deltaTime);
+        }
+
+        // Industry
+        if (GameManager.Instance.neededMaterialsPerDay > 0)
+        {
+            float industry = GameManager.Instance.producingMaterialsPerDay > 0
+                ? 1f - ((float)GameManager.Instance.producingMaterialsPerDay / (float)GameManager.Instance.neededMaterialsPerDay)
+                : 1f;
+
+            float fill = industry > 1f ? 0f : industry;
+
+            _industrialNeed.fillAmount = Mathf.MoveTowards(_industrialNeed.fillAmount, fill, _lerp * Time.deltaTime);
+        }
+        else
+        {
+            _industrialNeed.fillAmount = Mathf.MoveTowards(_industrialNeed.fillAmount, 0, _lerp * Time.deltaTime);
+        }
+
+        // Commercial
+        if ((float)GameManager.Instance.materials > 0 || GameManager.Instance.producingMaterialsPerDay > 0 || GameManager.Instance.neededProductsPerDay > 0)
+        {
+            float commercialForIndustry = (float)GameManager.Instance.GetMaxMaterials() > 0
+                ? 1f - ((float)GameManager.Instance.GetMaxMaterials() / (float)GameManager.Instance.materials)
+                : 1f;
+
+            float commercialForResidence = (float)GameManager.Instance.products > 0
+                ? 1f - ((float)GameManager.Instance.products / (float)GameManager.Instance.neededProductsPerDay)
+                : 1f;
+
+            Debug.Log($"I: {commercialForIndustry} R: {commercialForResidence}");
+            float commercial = (commercialForIndustry + commercialForResidence) / 2;
+
+            float fill = commercial > 1f ? 0f : commercial;
+
+            _commercialNeed.fillAmount = Mathf.MoveTowards(_commercialNeed.fillAmount, fill, _lerp * Time.deltaTime);
+        }
+        else
+        {
+            _commercialNeed.fillAmount = Mathf.MoveTowards(_commercialNeed.fillAmount, 0, _lerp * Time.deltaTime);
         }
     }
 
@@ -184,6 +237,10 @@ public class LabelManager : MonoBehaviour
                 : 0;
 
             _pieChartEmployed.fillAmount = Mathf.MoveTowards(_pieChartEmployed.fillAmount, fill, _lerp * Time.deltaTime);
-        } 
+        }
+        else
+        {
+            _pieChartEmployed.fillAmount = Mathf.MoveTowards(_pieChartEmployed.fillAmount, 1, _lerp * Time.deltaTime);
+        }
     }
 }

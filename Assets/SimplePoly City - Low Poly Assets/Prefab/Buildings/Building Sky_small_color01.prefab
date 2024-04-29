@@ -110,7 +110,8 @@ MonoBehaviour:
   _timerLbl: {fileID: 8939983944494163619}
   isBuilt: 0
   <population>k__BackingField: 50
-  <residentsCountUpdateRate>k__BackingField: 15
+  <residentsCountUpdateRate>k__BackingField: 6
+  <residentsCheckNeedsRate>k__BackingField: 5
 --- !u!65 &-7549033849361574121
 BoxCollider:
   m_ObjectHideFlags: 0

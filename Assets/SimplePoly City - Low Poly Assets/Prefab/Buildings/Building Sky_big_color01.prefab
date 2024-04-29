@@ -100,7 +100,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <cost>k__BackingField: 150
-  <waitUntilDestroying>k__BackingField: 60
+  <waitUntilDestroying>k__BackingField: 5
   widthX: 2
   lengthZ: 1
   <sprite>k__BackingField: {fileID: 21300000, guid: 3a22ac6276b480b4cbe608cd278b2e0f,
@@ -110,7 +110,8 @@ MonoBehaviour:
   _timerLbl: {fileID: 8758052993921477972}
   isBuilt: 0
   <population>k__BackingField: 80
-  <residentsCountUpdateRate>k__BackingField: 20
+  <residentsCountUpdateRate>k__BackingField: 6
+  <residentsCheckNeedsRate>k__BackingField: 5
 --- !u!65 &1440244528124939963
 BoxCollider:
   m_ObjectHideFlags: 0

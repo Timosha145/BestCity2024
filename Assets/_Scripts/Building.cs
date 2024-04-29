@@ -22,7 +22,7 @@ public class Building : MonoBehaviour
 
     public bool isBuilt = false;
 
-    private void Start()
+    protected virtual void Start()
     {
         _renderer = _selectVisual?.GetComponent<Renderer>();
     }
@@ -77,5 +77,4 @@ public class Building : MonoBehaviour
     }
 
     protected virtual void OnBuild() { }
-
 }

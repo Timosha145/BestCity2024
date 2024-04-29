@@ -152,6 +152,7 @@ public class PlacementSystem : MonoBehaviour
             _objectPreview = false;
             canBuild = true;
             _currentObject = null;
+            _currentBuilding = null;
         }
     }
 

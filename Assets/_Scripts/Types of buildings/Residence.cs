@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class Residence : Building
@@ -18,14 +19,14 @@ public class Residence : Building
         AssignRandomPeopleMoveInCount();
     }
 
-    protected override void Update()
+    protected async override Task Update()
     {
-        if (!isBuilt)
+        if (!isBuilt || toDestroy)
         {
             return;
         }
 
-        base.Update();
+        await base.Update();
 
         _timer += Time.deltaTime;
         _timerNeeds += Time.deltaTime;
@@ -66,6 +67,7 @@ public class Residence : Building
             GameManager.Instance.population -= currentPopulation;
             GameManager.Instance.neededProductsPerDay -= GameManager.Instance.dayDuration
                 / residentsCheckNeedsRate * GetMaxNeededProductCount();
+            GameManager.Instance.money -= cost * 2;
         }
     }
 

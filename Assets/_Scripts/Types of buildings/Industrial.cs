@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class Industrial : Building
@@ -29,14 +30,14 @@ public class Industrial : Building
         }
     }
 
-    protected override void Update()
+    protected async override Task Update()
     {
-        if (!isBuilt)
+        if (!isBuilt || toDestroy)
         {
             return;
         }
 
-        base.Update();
+        await base.Update();
 
         if (!IsEnoughWorkers(true))
         {
@@ -73,6 +74,7 @@ public class Industrial : Building
             GameManager.Instance.jobCount -= getMaximumJobCount();
             GameManager.Instance.producingMaterialsPerDay -= GetProducingMaterialsPerDay();
             GameManager.Instance.Unemploy(_workerCount);
+            GameManager.Instance.money -= cost * 2;
         }
     }
 

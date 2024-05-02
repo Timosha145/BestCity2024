@@ -17,6 +17,7 @@ public class GameManager : MonoBehaviour
     [field: Range(0, 1)]
     [field: SerializeField] public float productPerCitizen { get; private set; }
     [field: SerializeField] public float tax { get; private set; }
+    [field: SerializeField] public float benefitsPerCitizen { get; private set; }
     [field: SerializeField] public float dayDuration { get; private set; }
     [field: SerializeField] public int population { get; set; }
     [field: SerializeField] public int employed { get; private set; }
@@ -32,6 +33,9 @@ public class GameManager : MonoBehaviour
     public Mode currentMode { get; private set; } = Mode.idle;
     public event EventHandler<ModeEventArgs> onChangeMode;
     public event EventHandler onDayPassed;
+
+    public float sfxVolume { get; set; } = 0.5f;
+    public float musicVolume { get; set; } = 0.5f;
 
     private float _dayTimer;
 
@@ -77,6 +81,8 @@ public class GameManager : MonoBehaviour
         {
             _dayTimer = 0;
             onDayPassed?.Invoke(null, EventArgs.Empty);
+
+            money -= population * benefitsPerCitizen;
         }
     }
 

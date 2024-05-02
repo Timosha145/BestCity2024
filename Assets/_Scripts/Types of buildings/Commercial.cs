@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class Commercial : Building
@@ -29,14 +30,14 @@ public class Commercial : Building
         }
     }
 
-    protected override void Update()
+    protected async override Task Update()
     {
-        if (!isBuilt)
+        if (!isBuilt || toDestroy)
         {
             return;
         }
 
-        base.Update();
+        await base.Update();
 
         if (!IsEnoughWorkers(true))
         {
@@ -74,6 +75,7 @@ public class Commercial : Building
             GameManager.Instance.jobCount -= GetMaximumJobCount();
             GameManager.Instance.neededMaterialsPerDay -= GetNeededMaterialsPerDay();
             GameManager.Instance.producingProductsPerDay -= GetProducingProductsPerDay();
+            GameManager.Instance.money -= cost * 2;
             GameManager.Instance.Unemploy(_workerCount);
         }
     }

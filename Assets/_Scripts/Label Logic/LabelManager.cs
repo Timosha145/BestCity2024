@@ -7,6 +7,8 @@ public class LabelManager : MonoBehaviour
     [Header("Global Settings")]
     [Range(0f, 1f)]
     [SerializeField] private float _lerp = 0.1f;
+    [SerializeField] private AudioClip _pressAudio;
+    [SerializeField] private AudioSource _musicSource;
 
     [SerializeField] private TextMeshProUGUI _labelMoney;
     [SerializeField] private TextMeshProUGUI _labelPopulation;
@@ -41,10 +43,21 @@ public class LabelManager : MonoBehaviour
     [SerializeField] private Button _roadSelectBtn;
     [SerializeField] private Button _settingsBtn;
 
+    [Header("Toolbar")]
+    [SerializeField] private GameObject _pauseMenu;
+    [SerializeField] private GameObject _settingsMenu;
+    [SerializeField] private Button _resumeBtn;
+    [SerializeField] private Button _optionsBtn;
+    [SerializeField] private Button _exitBtn;
+    [SerializeField] private Button _backFromSettingsBtn;
+    [SerializeField] private Slider _sfxSlider;
+    [SerializeField] private Slider _musicSlider;
+
     private HorizontalLayoutGroup _residenceLayoutGroup;
     private HorizontalLayoutGroup _commercialLayoutGroup;
     private HorizontalLayoutGroup _industryLayoutGroup;
     private HorizontalLayoutGroup _otherLayoutGroup;
+    private AudioSource _audioSource;
 
     private void Awake()
     {
@@ -56,17 +69,65 @@ public class LabelManager : MonoBehaviour
 
     private void Start()
     {
+        _audioSource = GetComponent<AudioSource>();
+        _audioSource.clip = _pressAudio;
+
         InitLayoutGroups();
         DisableAllScrollViews();
 
+        _pauseMenu.SetActive(false);
+        _settingsMenu.SetActive(false);
         _residenceNeed.fillAmount = 0f;
         _commercialNeed.fillAmount = 0f;
         _industrialNeed.fillAmount = 0f;
         _jobNeed.fillAmount = 0f;
         _pieChartEmployed.fillAmount = 1f;
 
+        _sfxSlider.onValueChanged.AddListener((float value) =>
+        {
+            GameManager.Instance.sfxVolume = value;
+        });
+
+        _musicSlider.onValueChanged.AddListener((float value) =>
+        {
+            _musicSource.volume = value;
+            GameManager.Instance.musicVolume = value;
+        });
+
+        _backFromSettingsBtn.onClick.AddListener(() =>
+        {
+            _audioSource.volume = GameManager.Instance.sfxVolume;
+            _audioSource.Play();
+            _settingsMenu.SetActive(false);
+            _pauseMenu.SetActive(true);
+        });
+
+        _resumeBtn.onClick.AddListener(() =>
+        {
+            _audioSource.volume = GameManager.Instance.sfxVolume;
+            _audioSource.Play();
+            _pauseMenu.SetActive(false);
+        });
+
+        _optionsBtn.onClick.AddListener(() =>
+        {
+            _audioSource.volume = GameManager.Instance.sfxVolume;
+            _audioSource.Play();
+            _settingsMenu.SetActive(true);
+            _pauseMenu.SetActive(false);
+        });
+
+        _exitBtn.onClick.AddListener(() =>
+        {
+            _audioSource.volume = GameManager.Instance.sfxVolume;
+            _audioSource.Play();
+            Loader.Load(Loader.Scene.MainMenuScene);
+        });
+
         _residenceSelectBtn.onClick.AddListener(() =>
         {
+            _audioSource.volume = GameManager.Instance.sfxVolume;
+            _audioSource.Play();
             GameManager.Instance.ChangeMode(GameManager.Mode.building);
             DisableAllScrollViews();
 
@@ -76,6 +137,8 @@ public class LabelManager : MonoBehaviour
 
         _commercialSelectBtn.onClick.AddListener(() =>
         {
+            _audioSource.volume = GameManager.Instance.sfxVolume;
+            _audioSource.Play();
             GameManager.Instance.ChangeMode(GameManager.Mode.building);
             DisableAllScrollViews();
 
@@ -85,6 +148,8 @@ public class LabelManager : MonoBehaviour
 
         _industrySelectBtn.onClick.AddListener(() =>
         {
+            _audioSource.volume = GameManager.Instance.sfxVolume;
+            _audioSource.Play();
             GameManager.Instance.ChangeMode(GameManager.Mode.building);
             DisableAllScrollViews();
 
@@ -94,6 +159,8 @@ public class LabelManager : MonoBehaviour
 
         _roadSelectBtn.onClick.AddListener(() =>
         {
+            _audioSource.volume = GameManager.Instance.sfxVolume;
+            _audioSource.Play();
             GameManager.Instance.ChangeMode(GameManager.Mode.building);
             DisableAllScrollViews();
 
@@ -104,7 +171,9 @@ public class LabelManager : MonoBehaviour
 
         _settingsBtn.onClick.AddListener(() =>
         {
-            Loader.Load(Loader.Scene.MainMenuScene);
+            _audioSource.volume = GameManager.Instance.sfxVolume;
+            _audioSource.Play();
+            _pauseMenu.SetActive(true);
         });
     }
 
@@ -212,8 +281,8 @@ public class LabelManager : MonoBehaviour
         // Commercial
         if ((float)GameManager.Instance.materials > 0 || GameManager.Instance.producingMaterialsPerDay > 0 || GameManager.Instance.neededProductsPerDay > 0)
         {
-            float commercialForIndustry = (float)GameManager.Instance.GetMaxMaterials() > 0
-                ? 1f - ((float)GameManager.Instance.GetMaxMaterials() / (float)GameManager.Instance.materials)
+            float commercialForIndustry = (float)GameManager.Instance.neededMaterialsPerDay > 0
+                ? 1f - ((float)GameManager.Instance.neededMaterialsPerDay / (float)GameManager.Instance.materials)
                 : 1f;
 
             float commercialForResidence = (float)GameManager.Instance.products > 0
@@ -221,7 +290,6 @@ public class LabelManager : MonoBehaviour
                 : 1f;
 
             float commercial = (commercialForIndustry + commercialForResidence) / 2;
-
             float fill = commercial > 1f ? 0f : commercial;
 
             _commercialNeed.fillAmount = Mathf.MoveTowards(_commercialNeed.fillAmount, fill, _lerp * Time.deltaTime);

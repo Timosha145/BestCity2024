@@ -15,7 +15,9 @@ public class Road : MonoBehaviour
     [field: SerializeField] public RoadType type { get; private set; } = RoadType.Other;
     [field: SerializeField] public Road crossingVersion { get; private set; }
     [field: SerializeField] public float cost { get; private set; } = 15f;
+    [SerializeField] private AudioClip _onBuildAudio;
 
+    private AudioSource _audioSource;
     private Renderer _renderer;
     public List<Road> collidingRoads { get; private set; } = new List<Road>();
 
@@ -29,11 +31,15 @@ public class Road : MonoBehaviour
 
     private void Start()
     {
+        _audioSource = GetComponent<AudioSource>();
         _renderer = GetComponent<Renderer>();
     }
 
     public void Pay()
     {
+        _audioSource.clip = _onBuildAudio;
+        _audioSource.volume = GameManager.Instance.sfxVolume;
+        _audioSource.Play();
         GameManager.Instance.money -= cost;
     }
 

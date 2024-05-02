@@ -116,6 +116,7 @@ public class PlacementSystem : MonoBehaviour
         if (_objectPreview && _currentObject != null)
         {
             cellIndicator.transform.rotation = _currentObject.transform.rotation;
+
             _currentObject.transform.position = IsCursorDefaultSize()
                 ? _selectedGridPosition + _offset + _cursorDefaultOffset
                 : _selectedGridPosition + _offset;
@@ -195,8 +196,8 @@ public class PlacementSystem : MonoBehaviour
             }
             else if (_currentObject.TryGetComponent(out Road road) && road.CanBuild())
             {
+                bool pay = true;
                 success = true;
-                road.Pay();
                 List<Road> roadsToRotate = new List<Road> { road };
                 roadsToRotate.AddRange(road.GetCollidingRoads(road.transform.position));
 
@@ -206,6 +207,12 @@ public class PlacementSystem : MonoBehaviour
                     GameObject newBuilding = ChangeBuilding(roadToRotate.gameObject, suitableRoad.gameObject);
                     Road newRoad = newBuilding.GetComponent<Road>();
                     await Task.Delay(TimeSpan.FromSeconds(0.025f));
+
+                    if (pay)
+                    {
+                        newRoad.Pay();
+                        pay = false;
+                    }
 
                     for (int i = 0; i < 10; i++)
                     {
@@ -302,7 +309,7 @@ public class PlacementSystem : MonoBehaviour
         Vector3 cursorSize = new Vector3(building.widthX, 1f, building.lengthZ);
         cellIndicator.transform.localScale = cursorSize;
 
-        cellIndicator.transform.position = _selectedGridPosition + _offset;
+        //cellIndicator.transform.position = _selectedGridPosition + _offset;
     }
 
     public void ResetCursorIndicator()

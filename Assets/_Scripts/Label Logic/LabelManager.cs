@@ -39,6 +39,7 @@ public class LabelManager : MonoBehaviour
     [SerializeField] private Button _industrySelectBtn;
     [SerializeField] private Button _otherSelectBtn;
     [SerializeField] private Button _roadSelectBtn;
+    [SerializeField] private Button _settingsBtn;
 
     private HorizontalLayoutGroup _residenceLayoutGroup;
     private HorizontalLayoutGroup _commercialLayoutGroup;
@@ -99,6 +100,11 @@ public class LabelManager : MonoBehaviour
             PlacementSystem.Instance.CancelBuilding();
             PlacementSystem.Instance.ChangePrefab(GameManager.Instance.roadPreview.gameObject);
             PlacementSystem.Instance.InitObject();
+        });
+
+        _settingsBtn.onClick.AddListener(() =>
+        {
+            Loader.Load(Loader.Scene.MainMenuScene);
         });
     }
 
@@ -214,7 +220,6 @@ public class LabelManager : MonoBehaviour
                 ? 1f - ((float)GameManager.Instance.products / (float)GameManager.Instance.neededProductsPerDay)
                 : 1f;
 
-            Debug.Log($"I: {commercialForIndustry} R: {commercialForResidence}");
             float commercial = (commercialForIndustry + commercialForResidence) / 2;
 
             float fill = commercial > 1f ? 0f : commercial;

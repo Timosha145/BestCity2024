@@ -45,6 +45,11 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    new public static void ResetStaticData()
+    {
+        //reset static events
+    }
+
     public enum Mode
     {
         building,

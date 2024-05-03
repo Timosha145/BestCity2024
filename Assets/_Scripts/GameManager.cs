@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
     [field: SerializeField] public List<Road> roadPrefabs { get; private set; }
     [field: SerializeField] public Road roadPreview { get; private set; }
     [field: Header("Game Settings")]
+    [field: SerializeField] public float gameTimer { get; private set; } = 60f;
     [field: Range(0, 1)]
     [field: SerializeField] public float productPerCitizen { get; private set; }
     [field: SerializeField] public float tax { get; private set; }
@@ -33,9 +34,12 @@ public class GameManager : MonoBehaviour
     public Mode currentMode { get; private set; } = Mode.idle;
     public event EventHandler<ModeEventArgs> onChangeMode;
     public event EventHandler onDayPassed;
+    public event EventHandler<GameOverEventArgs> onGameOver;
 
+    public float gameTimerMax { get; private set; }
     public float sfxVolume { get; set; } = 0.5f;
     public float musicVolume { get; set; } = 0.5f;
+    public bool gameOver { get; private set; } = false;
 
     private float _dayTimer;
 
@@ -49,7 +53,17 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    new public static void ResetStaticData()
+    public class GameOverEventArgs : EventArgs
+    {
+        public readonly float population;
+
+        public GameOverEventArgs(float population)
+        {
+            this.population = population;
+        }
+    }
+
+    public static void ResetStaticData()
     {
         //reset static events
     }
@@ -69,13 +83,27 @@ public class GameManager : MonoBehaviour
         }
         else
         {
+            gameTimerMax = gameTimer;
             Instance = this;
         }
     }
 
     private void Update()
     {
+        if (gameOver)
+        {
+            return;
+        }
+
         _dayTimer += Time.deltaTime;
+        gameTimer -= Time.deltaTime;
+
+        if (gameTimer <= 0 && !gameOver)
+        {
+            gameOver = true;
+            Time.timeScale = 0f;
+            onGameOver?.Invoke(null, new GameOverEventArgs(population));
+        }
 
         if (_dayTimer > dayDuration)
         {

@@ -1,6 +1,8 @@
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Button = UnityEngine.UI.Button;
 
 public class LabelManager : MonoBehaviour
 {
@@ -8,12 +10,11 @@ public class LabelManager : MonoBehaviour
     [Range(0f, 1f)]
     [SerializeField] private float _lerp = 0.1f;
     [SerializeField] private AudioClip _pressAudio;
+    [SerializeField] private AudioClip _gameOverAudio;
     [SerializeField] private AudioSource _musicSource;
-
+    [SerializeField] private TextMeshProUGUI _labelGameTimer;
     [SerializeField] private TextMeshProUGUI _labelMoney;
     [SerializeField] private TextMeshProUGUI _labelPopulation;
-    [SerializeField] private TextMeshProUGUI _materialsLabel;
-    [SerializeField] private TextMeshProUGUI _productsLabel;
 
     [Header("Employed Pie Chart")]
     [SerializeField] private Image _pieChartEmployed;
@@ -53,11 +54,21 @@ public class LabelManager : MonoBehaviour
     [SerializeField] private Slider _sfxSlider;
     [SerializeField] private Slider _musicSlider;
 
+    [Header("Game Over")]
+    [SerializeField] private GameObject _gameOverWindow;
+    [SerializeField] private Button _backToMenuBtn;
+    [SerializeField] private TextMeshProUGUI _gameOverLabel;
+    [SerializeField] private GameObject[] _gameWindows;
+
     private HorizontalLayoutGroup _residenceLayoutGroup;
     private HorizontalLayoutGroup _commercialLayoutGroup;
     private HorizontalLayoutGroup _industryLayoutGroup;
     private HorizontalLayoutGroup _otherLayoutGroup;
     private AudioSource _audioSource;
+
+    private Color _baseColor;
+    private float _colorIncreaseRate = 0.05f;
+    private float _currentRedFactor = 0f;
 
     private void Awake()
     {
@@ -65,6 +76,7 @@ public class LabelManager : MonoBehaviour
         _commercialLayoutGroup = _commercialRect.GetComponent<HorizontalLayoutGroup>();
         _industryLayoutGroup = _industryRect.GetComponent<HorizontalLayoutGroup>();
         //_otherLayoutGroup = _otherRect.GetComponent<HorizontalLayoutGroup>();
+        _baseColor = _labelGameTimer.color;
     }
 
     private void Start()
@@ -77,11 +89,14 @@ public class LabelManager : MonoBehaviour
 
         _pauseMenu.SetActive(false);
         _settingsMenu.SetActive(false);
+        _gameOverWindow.SetActive(false);
         _residenceNeed.fillAmount = 0f;
         _commercialNeed.fillAmount = 0f;
         _industrialNeed.fillAmount = 0f;
         _jobNeed.fillAmount = 0f;
         _pieChartEmployed.fillAmount = 1f;
+
+        GameManager.Instance.onGameOver += GameManagerOnGameOver;
 
         _sfxSlider.onValueChanged.AddListener((float value) =>
         {
@@ -96,6 +111,7 @@ public class LabelManager : MonoBehaviour
 
         _backFromSettingsBtn.onClick.AddListener(() =>
         {
+            _audioSource.clip = _pressAudio;
             _audioSource.volume = GameManager.Instance.sfxVolume;
             _audioSource.Play();
             _settingsMenu.SetActive(false);
@@ -104,6 +120,7 @@ public class LabelManager : MonoBehaviour
 
         _resumeBtn.onClick.AddListener(() =>
         {
+            _audioSource.clip = _pressAudio;
             _audioSource.volume = GameManager.Instance.sfxVolume;
             _audioSource.Play();
             _pauseMenu.SetActive(false);
@@ -111,6 +128,7 @@ public class LabelManager : MonoBehaviour
 
         _optionsBtn.onClick.AddListener(() =>
         {
+            _audioSource.clip = _pressAudio;
             _audioSource.volume = GameManager.Instance.sfxVolume;
             _audioSource.Play();
             _settingsMenu.SetActive(true);
@@ -119,6 +137,15 @@ public class LabelManager : MonoBehaviour
 
         _exitBtn.onClick.AddListener(() =>
         {
+            _audioSource.clip = _pressAudio;
+            _audioSource.volume = GameManager.Instance.sfxVolume;
+            _audioSource.Play();
+            Loader.Load(Loader.Scene.MainMenuScene);
+        });
+
+        _backToMenuBtn.onClick.AddListener(() =>
+        {
+            _audioSource.clip = _pressAudio;
             _audioSource.volume = GameManager.Instance.sfxVolume;
             _audioSource.Play();
             Loader.Load(Loader.Scene.MainMenuScene);
@@ -126,6 +153,7 @@ public class LabelManager : MonoBehaviour
 
         _residenceSelectBtn.onClick.AddListener(() =>
         {
+            _audioSource.clip = _pressAudio;
             _audioSource.volume = GameManager.Instance.sfxVolume;
             _audioSource.Play();
             GameManager.Instance.ChangeMode(GameManager.Mode.building);
@@ -137,6 +165,7 @@ public class LabelManager : MonoBehaviour
 
         _commercialSelectBtn.onClick.AddListener(() =>
         {
+            _audioSource.clip = _pressAudio;
             _audioSource.volume = GameManager.Instance.sfxVolume;
             _audioSource.Play();
             GameManager.Instance.ChangeMode(GameManager.Mode.building);
@@ -148,6 +177,7 @@ public class LabelManager : MonoBehaviour
 
         _industrySelectBtn.onClick.AddListener(() =>
         {
+            _audioSource.clip = _pressAudio;
             _audioSource.volume = GameManager.Instance.sfxVolume;
             _audioSource.Play();
             GameManager.Instance.ChangeMode(GameManager.Mode.building);
@@ -159,6 +189,7 @@ public class LabelManager : MonoBehaviour
 
         _roadSelectBtn.onClick.AddListener(() =>
         {
+            _audioSource.clip = _pressAudio;
             _audioSource.volume = GameManager.Instance.sfxVolume;
             _audioSource.Play();
             GameManager.Instance.ChangeMode(GameManager.Mode.building);
@@ -171,10 +202,30 @@ public class LabelManager : MonoBehaviour
 
         _settingsBtn.onClick.AddListener(() =>
         {
+            _audioSource.clip = _pressAudio;
             _audioSource.volume = GameManager.Instance.sfxVolume;
             _audioSource.Play();
             _pauseMenu.SetActive(true);
         });
+    }
+
+    private void GameManagerOnGameOver(object sender, GameManager.GameOverEventArgs e)
+    {
+        Debug.Log("Call");
+
+        _audioSource.clip = _gameOverAudio;
+        _audioSource.volume = GameManager.Instance.sfxVolume;
+        _audioSource.Play();
+
+        foreach (GameObject gameObject in _gameWindows)
+        {
+            gameObject.SetActive(false);
+            PlacementSystem.Instance.CancelBuilding();
+            GameManager.Instance.ChangeMode(GameManager.Mode.idle);
+        }
+
+        _gameOverWindow.SetActive(true);
+        _gameOverLabel.text = e.population.ToString();
     }
 
     private void Update()
@@ -184,8 +235,6 @@ public class LabelManager : MonoBehaviour
             : GameManager.Instance.money.ToString("N0");
 
         _labelPopulation.text = GameManager.Instance.population.ToString();
-        _materialsLabel.text = GameManager.Instance.neededProductsPerDay.ToString();
-        _productsLabel.text = GameManager.Instance.products.ToString();
         UpdateNeedCharts();
         UpdateEmployedPieChart();
 
@@ -195,6 +244,37 @@ public class LabelManager : MonoBehaviour
             DisableAllScrollViews();
             GameManager.Instance.ChangeMode(GameManager.Mode.idle);
         }
+
+        _currentRedFactor += _colorIncreaseRate * Time.deltaTime;
+        _currentRedFactor = Mathf.Clamp01(_currentRedFactor);
+        _labelGameTimer.color = new Color(_baseColor.r + _currentRedFactor, _baseColor.g, _baseColor.b, _baseColor.a);
+
+        _labelGameTimer.text = FormatTime(GameManager.Instance.gameTimer);
+    }
+
+    private void OnDestroy()
+    {
+        _sfxSlider.onValueChanged.RemoveAllListeners();
+        _musicSlider.onValueChanged.RemoveAllListeners();
+        _backFromSettingsBtn.onClick.RemoveAllListeners();
+        _resumeBtn.onClick.RemoveAllListeners();
+        _optionsBtn.onClick.RemoveAllListeners();
+        _exitBtn.onClick.RemoveAllListeners();
+        _residenceSelectBtn.onClick.RemoveAllListeners();
+        _commercialSelectBtn.onClick.RemoveAllListeners();
+        _industrySelectBtn.onClick.RemoveAllListeners();
+        _roadSelectBtn.onClick.RemoveAllListeners();
+        _settingsBtn.onClick.RemoveAllListeners();
+
+        GameManager.Instance.onGameOver -= GameManagerOnGameOver;
+    }
+
+    private string FormatTime(float timeInSeconds)
+    {
+        TimeSpan timeSpan = TimeSpan.FromSeconds(timeInSeconds);
+        string formattedTime = string.Format("{0:00}:{1:00}", timeSpan.Minutes, timeSpan.Seconds);
+
+        return formattedTime;
     }
 
     private void DisableAllScrollViews()
